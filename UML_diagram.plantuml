@@ -1,0 +1,50 @@
+@startuml Rosie-Rivet
+
+class RivetController {
+   + Rivet Rivet
+   ..API calls..
+   
+
+
+}
+
+class Rivet {
+    + List Riveters riveterList
+
+    + __self__( *Riveters ) : Rivet
+    + read_file( filename ) : List fileContents
+    + addRivet ( Riveter ) : boolean
+    + applyRivets( List Riveters, List fileContents ) : List rivetedContents
+    
+    + if __name__ == "__main__" ()
+}
+
+abstract class Riveter {
+    + apply(List column) : List rivetedColumn
+    + getName() : rivetName
+}
+
+class GeneDateRiveter extends Riveter {
+    + known_gene_mistakes : Dictionary
+    + GeneDateRiveter( self )
+}
+
+class DateRiveter extends Riveter {
+    + month_dict : Dictionary
+    + DateRiveter( self )
+}
+
+class CSVInjectionRiveter extends Riveter {
+    + CSVInjectionRiveter( self )
+}
+
+class LargeIntegerRiveter extends Riveter {
+    + LargeIntegerRiveter( self )
+}
+
+class LocaleRiveter extends Riveter {
+    + LocaleRiveter( self )
+}
+
+
+@enduml
