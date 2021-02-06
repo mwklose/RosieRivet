@@ -1,0 +1,23 @@
+@startuml Sequence_diagram
+
+title Example processFile(JSON) call
+'Handle Rivet creation
+Frontend -> RivetController: HTTP POST (JSON)
+RivetController -> Rivet: processFile(JSON)
+Rivet -> Rivet: Rivet.parseWeb(JSON)
+
+'Apply Riveters
+Rivet -> Rivet: applyRivets(List riveters)
+Rivet -> GeneDateRiveter: apply(column)
+GeneDateRiveter --> Rivet: rivetedColumn
+Rivet -> DateRiveter: apply(column)
+DateRiveter --> Rivet: rivetedColumn
+Rivet -> CSVInjectionRiveter: apply(column)
+CSVInjectionRiveter --> Rivet: rivetedColumn
+note right of Rivet: Continues for as many riveters as needed
+...
+
+Rivet --> RivetController: DataFrame
+RivetController --> Frontend: JSON
+
+@enduml

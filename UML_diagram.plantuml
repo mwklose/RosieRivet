@@ -2,21 +2,26 @@
 
 class RivetController {
    + Rivet Rivet
-   ..API calls..
-   
-
-
+   + processFile( dataJSON ) : JSON 
+   + retrieveMetadata ( ) : JSON
 }
 
 class Rivet {
     + List Riveters riveterList
+    + DataFrame fileContents
+    + float confidence
 
-    + __self__( *Riveters ) : Rivet
-    + read_file( filename ) : List fileContents
+    + __self__( fileContents, *Riveters, confidence ) : Rivet
     + addRivet ( Riveter ) : boolean
-    + applyRivets( List Riveters, List fileContents ) : List rivetedContents
-    
-    + if __name__ == "__main__" ()
+    + applyRivets( List Riveters, DataFrame fileContents, confidence ) : DataFrame rivetedContents
+
+    ' myRivet = Rivet.parseWeb(JSON) is example call
+    + parseWeb(JSON) : Rivet
+    + parseCLI(*args) : Rivet
+}
+
+class RivetIO {
+    + write_file( filename ) : none
 }
 
 abstract class Riveter {

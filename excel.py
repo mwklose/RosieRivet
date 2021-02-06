@@ -1,4 +1,6 @@
-import json, os, rosie, csv, sys
+#!/usr/bin/env python3.9
+import json, os, csv, sys
+import rosie
 
 THRESHOLD = 0.8
 
