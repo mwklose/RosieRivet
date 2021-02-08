@@ -6,22 +6,25 @@ class RivetController {
    + retrieveMetadata ( ) : JSON
 }
 
+class RivetCLI {
+    if __main__:
+}
+
 class Rivet {
     + List Riveters riveterList
     + DataFrame fileContents
     + float confidence
 
     + __self__( fileContents, *Riveters, confidence ) : Rivet
-    + addRivet ( Riveter ) : boolean
-    + applyRivets( List Riveters, DataFrame fileContents, confidence ) : DataFrame rivetedContents
+    + applyRivets( self ) : DataFrame rivetedContents
 
-    ' myRivet = Rivet.parseWeb(JSON) is example call
+    + getFileContents() : DataFrame
 }
 
 class RivetIO {
     + write_file( filename ) : none
-    + parse( filename ) : Rivet
-    + parse( json ) : Rivet
+    + parse( filename, arguments ) : Rivet
+    + parse( json, arguments ) : Rivet
 }
 
 abstract class Riveter {
@@ -51,5 +54,6 @@ class LocaleRiveter extends Riveter {
     + LocaleRiveter( self )
 }
 
-
+' change layout
+Rivet -[hidden]- Riveter
 @enduml
