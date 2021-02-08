@@ -2,12 +2,14 @@
 
 title Example processFile(JSON) call
 'Handle Rivet creation
-Frontend -> RivetController: HTTP POST (JSON)
-RivetController -> Rivet: processFile(JSON)
-Rivet -> Rivet: Rivet.parseWeb(JSON)
+Frontend -> RivetController: HTTP POST (JSON) processFile(JSON)
+RivetController -> RivetIO: parse(filecontents, args)
+RivetIO -> Rivet: Rivet(filecontents,riveters,confidence)
+Rivet --> RivetIO: Rivet
+RivetIO --> RivetController: Rivet
 
 'Apply Riveters
-Rivet -> Rivet: applyRivets(List riveters)
+RivetController -> Rivet: applyRivets()
 Rivet -> GeneDateRiveter: apply(column)
 GeneDateRiveter --> Rivet: rivetedColumn
 Rivet -> DateRiveter: apply(column)
@@ -17,6 +19,7 @@ CSVInjectionRiveter --> Rivet: rivetedColumn
 note right of Rivet: Continues for as many riveters as needed
 ...
 
+RivetController -> Rivet: getFileContents()
 Rivet --> RivetController: DataFrame
 RivetController --> Frontend: JSON
 
