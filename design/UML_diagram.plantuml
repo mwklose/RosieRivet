@@ -16,12 +16,12 @@ class Rivet {
     + applyRivets( List Riveters, DataFrame fileContents, confidence ) : DataFrame rivetedContents
 
     ' myRivet = Rivet.parseWeb(JSON) is example call
-    + parseWeb(JSON) : Rivet
-    + parseCLI(*args) : Rivet
 }
 
 class RivetIO {
     + write_file( filename ) : none
+    + parse( filename ) : Rivet
+    + parse( json ) : Rivet
 }
 
 abstract class Riveter {
