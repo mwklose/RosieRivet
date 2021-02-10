@@ -1,59 +1,74 @@
 @startuml Rosie-Rivet
 
-class RivetController {
-   + Rivet Rivet
-   + processFile( dataJSON ) : JSON 
-   + retrieveMetadata ( ) : JSON
+package "Rivet Runners" #00716d {
+    class RivetController {
+        + Rivet Rivet
+        + processFile( dataJSON ) : JSON 
+        + retrieveMetadata ( ) : JSON
+    }
+
+    class RivetCLI {
+        if __main__:
+    }
+
+    class RivetExcelRunner {
+        processSheet( ) : none
+    }
 }
 
-class RivetCLI {
-    if __main__:
+package "Rivet Core" #008473 {
+    class Rivet {
+        + List Riveters riveterList
+        + DataFrame fileContents
+        + float confidence
+
+        + __self__( fileContents, *Riveters, confidence ) : Rivet
+        + applyRivets( self ) : DataFrame rivetedContents
+
+        + getFileContents() : DataFrame
+    }
 }
 
-class Rivet {
-    + List Riveters riveterList
-    + DataFrame fileContents
-    + float confidence
-
-    + __self__( fileContents, *Riveters, confidence ) : Rivet
-    + applyRivets( self ) : DataFrame rivetedContents
-
-    + getFileContents() : DataFrame
+package "IO Operators" #2db597 {
+    class RivetIO {
+        + write_file( filename ) : none
+        + parseFile( filename, arguments ) : Rivet
+        + parseJSON( json, arguments ) : Rivet
+    }
 }
 
-class RivetIO {
-    + write_file( filename ) : none
-    + parse( filename, arguments ) : Rivet
-    + parse( json, arguments ) : Rivet
+package "Riveters"  #91f2cb {
+    abstract class Riveter {
+        + apply(List column) : List rivetedColumn
+        + getName() : rivetName
+    }
+
+    class GeneDateRiveter extends Riveter {
+        + known_gene_mistakes : Dictionary
+        + GeneDateRiveter( self )
+    }
+
+    class DateRiveter extends Riveter {
+        + month_dict : Dictionary
+        + DateRiveter( self )
+    }
+
+    class CSVInjectionRiveter extends Riveter {
+        + CSVInjectionRiveter( self )
+    }
+
+    class LargeIntegerRiveter extends Riveter {
+        + LargeIntegerRiveter( self )
+    }
+
+    class LocaleRiveter extends Riveter {
+        + LocaleRiveter( self )
+    }
 }
 
-abstract class Riveter {
-    + apply(List column) : List rivetedColumn
-    + getName() : rivetName
-}
-
-class GeneDateRiveter extends Riveter {
-    + known_gene_mistakes : Dictionary
-    + GeneDateRiveter( self )
-}
-
-class DateRiveter extends Riveter {
-    + month_dict : Dictionary
-    + DateRiveter( self )
-}
-
-class CSVInjectionRiveter extends Riveter {
-    + CSVInjectionRiveter( self )
-}
-
-class LargeIntegerRiveter extends Riveter {
-    + LargeIntegerRiveter( self )
-}
-
-class LocaleRiveter extends Riveter {
-    + LocaleRiveter( self )
-}
 
 ' change layout
-Rivet -[hidden]- Riveter
+Rivet *-- Riveter
+RivetController -[hidden] RivetExcelRunner
+
 @enduml
