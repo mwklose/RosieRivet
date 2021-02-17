@@ -1,0 +1,160 @@
+@startuml
+    'skinparam linetype polyline
+
+    'Three users, order them
+    actor WebUser 
+    actor ExcelUser
+    actor CLIUser
+
+    ' Order the users (will be hidden)
+
+    ' Web files and artifacts
+    file WebCSV
+    file ModifiedWebCSV
+    artifact HomePage
+    artifact AnalyzePage
+    artifact DownloadPage
+
+    ' CLI files and artifacts
+    file CLI_CSV
+    
+
+    ' Excel Files and artifacts
+    file ExcelCSV
+
+    'Three interfaces to run
+    cloud Server {
+        card AnalyzeFile [
+            <b> AnalyzeFile </b>
+            Input: CSV file
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: JSON with <i>RivetFileAnalyzer</i> output
+        ]
+        card ProcessFile [
+            <b> ProcessFile </b>
+            Input: CSV file, JSON options (analyses, confidence level)
+            Process: Defers to <i>RivetProcessor</i>
+            Output: ZIP containing:
+                    CSV (modified) with <i>RivetProcessor</i> output
+                    TXT with Rivet Analysis
+        ]
+    }
+
+    node ExcelRunner {
+        card Step1ER [
+            <b>Step 1: </b> Analyze File
+            Input: Current worksheet
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: Side Panel with <i>RivetFileAnalyzer</i> output, 
+                        options to select
+        ]
+        card Step2ER [
+            <b>Step 2: </b> Process File
+            Input: Current worksheet, options selected from ribbon
+            Process: Defers to <i>RivetProcessor</i>
+            Output: 2 New sheets containing:
+                    1. Modified <i>RivetProcessor</i> output
+                    2. CSV with Rivet Analysis
+        ]
+        
+        
+    }
+
+    node RivetCLI {
+        card Step1CLI [
+            <b>Step 1: </b> Analyze File
+            Input: CSV file
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: JSON with <i>RivetFileAnalyzer</i> output
+        ]
+        card Step2CLI [
+            <b>Step 2: </b> Process File
+            Input: CSV file, options from command line
+            Process: Defers to <i>RivetProcessor</i>
+            Output: ZIP containing:
+                    CSV (modified) with <i>RivetProcessor</i> output
+                    TXT with Rivet Analysis
+        ]
+        
+    }
+    component RosieRivet {
+        card RivetFileAnalyzer [
+            <b>RivetFileAnalyzer</b>
+            Input: CSV file
+            Process: internal
+            Output: CSV Size, Separator Used, 
+                    Column Types, CSV Injections Found
+        ]
+        card RivetProcessor [
+            <b>RivetProcessor</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: CSV Size, Separator Used, 
+                    Column Types, CSV Injections Found
+        ]
+        'within riveters, have Apply AND Analyze functions
+        component Riveters {
+            card Riveter
+            card GeneDateRiveter
+            card LargeIntRiveter
+            card CSVInjectionRiveter
+            card DateFormatRiveter
+
+            Riveter -- GeneDateRiveter
+            Riveter -- LargeIntRiveter
+            Riveter -- CSVInjectionRiveter
+            Riveter -- DateFormatRiveter
+        }
+
+        RivetProcessor -- Riveter
+        
+    }
+
+    database MongoDB [
+        <b>MongoDB</b>
+        CSV Size,
+        User Country
+    ]
+
+    'USERS 
+    WebUser -- WebCSV
+    ExcelUser -- ExcelCSV 
+    CLIUser -- CLI_CSV
+    ' WEB INTERFACE FLOW
+    MongoDB <-- AnalyzeFile
+
+    
+    WebCSV --> HomePage : Uploads
+    AnalyzeFile <-- HomePage
+    
+    AnalyzeFile --- RivetFileAnalyzer
+    Step1ER --- RivetFileAnalyzer
+    Step1CLI --- RivetFileAnalyzer
+
+    AnalyzePage <-- AnalyzeFile
+    WebUser ..> AnalyzePage : Provides input
+    AnalyzePage --> ProcessFile
+    
+    
+    DownloadPage <-- ProcessFile
+    ProcessFile --- RivetProcessor
+    Step2ER --- RivetProcessor
+    Step2CLI --- RivetProcessor
+
+
+    ModifiedWebCSV <-- DownloadPage
+    WebUser <-- ModifiedWebCSV : Downloads
+
+    'FORMATTING FOR WEBUSER TO BE HAPPY
+    MongoDB -[hidden] HomePage
+    HomePage -[hidden] AnalyzePage
+    AnalyzePage -[hidden] DownloadPage
+
+
+    ExcelCSV -- ExcelRunner
+    
+    CLI_CSV -- RivetCLI
+
+    
+
+@enduml

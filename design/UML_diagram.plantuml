@@ -39,7 +39,7 @@ package "IO Operators" #2db597 {
 
 package "Riveters"  #91f2cb {
     abstract class Riveter {
-        + apply(List column) : List rivetedColumn
+        + apply(List column, confidence) : List rivetedColumn
         + getName() : rivetName
     }
 
