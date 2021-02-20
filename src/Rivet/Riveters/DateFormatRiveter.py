@@ -1,7 +1,6 @@
-import pandas
-
+from . import Riveter
 # @author MWK
-class Riveter():
+class DateFormatRiveter(Riveter.Riveter):
 
     def __init__(self):
         pass

@@ -1,6 +1,8 @@
-import Riveter
+from . import Riveter
+
+
 # @author MWK
-class CSVInjectionRiveter(Riveter):
+class LargeIntRiveter(Riveter.Riveter):
 
     def __init__(self):
         pass

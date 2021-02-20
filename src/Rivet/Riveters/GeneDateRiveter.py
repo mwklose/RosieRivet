@@ -1,6 +1,6 @@
-import Riveter
+from . import Riveter
 # @author MWK
-class DateFormatRiveter(Riveter):
+class GeneDateRiveter(Riveter.Riveter):
 
     def __init__(self):
         pass
