@@ -10,3 +10,6 @@ class GeneDateRiveter(Riveter):
 
     def apply(self, column):
         pass
+
+    def scream(self):
+        pass

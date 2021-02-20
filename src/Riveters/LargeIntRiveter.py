@@ -1,7 +1,6 @@
-import pandas
-
+import Riveter
 # @author MWK
-class Riveter():
+class LargeIntRiveter(Riveter):
 
     def __init__(self):
         pass
