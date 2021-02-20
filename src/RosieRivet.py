@@ -1,6 +1,10 @@
 import rosie
 import sys
 
+# https://stackoverflow.com/questions/1057431/how-to-load-all-modules-in-a-folder
+# WE GON LOAD ALL THEM RIVETERS UP IN THIS HOE
+
+
 # @author MWK
 class RosieRivet():
 
