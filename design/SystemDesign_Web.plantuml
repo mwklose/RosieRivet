@@ -1,0 +1,98 @@
+@startuml Web Interface Design
+actor WebUser
+actor/ EndWebUser
+' Excel files and artifacts
+    file WebCSV
+    file ModifiedWebCSV
+
+    artifact HomePage
+    artifact AnalyzePage
+    artifact DownloadPage
+
+'Three interfaces to run
+cloud Server {
+    card AnalyzeFile [
+        <b> AnalyzeFile </b>
+        Input: CSV file
+        Process: Defers to <i>RivetFileAnalyzer</i>
+        Output: JSON with <i>RivetFileAnalyzer</i> output
+    ]
+    card ProcessFile [
+        <b> ProcessFile </b>
+        Input: CSV file, JSON options (analyses, confidence level)
+        Process: Defers to <i>RivetProcessor</i>
+        Output: ZIP containing:
+                CSV (modified) with <i>RivetProcessor</i> output
+                TXT with Rivet Analysis
+    ]
+}
+
+database MongoDB [
+        <b>MongoDB</b>
+        CSV Size,
+        User Country
+    ]
+
+component RosieRivet #FAC800 {
+        card RivetFileAnalyzer [
+            <b>RivetFileAnalyzer</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: CSV Size, Separator Used, 
+                    Column Types, CSV Injections Found
+        ]
+        card RivetProcessor [
+            <b>RivetProcessor</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: Processed CSV File, 
+                    Analysis Summary
+        ]
+        'within riveters, have Apply AND Analyze functions
+        component Riveters {
+            card Riveter [
+                <b>Riveter</b>
+                ..
+                <i>analyze</i>(Pandas Column)
+                <i>apply</i>(Pandas Column)
+            ]
+            card GeneDateRiveter
+            card LargeIntRiveter
+            card CSVInjectionRiveter
+            card DateFormatRiveter
+
+            Riveter -- GeneDateRiveter
+            Riveter -- LargeIntRiveter
+            Riveter -- CSVInjectionRiveter
+            Riveter -- DateFormatRiveter
+        }
+        RivetFileAnalyzer .. Riveter : utilizes
+        RivetProcessor .. Riveter : utilizes
+        
+    }
+
+    WebUser -[hidden] EndWebUser
+    ' WEB INTERFACE FLOW
+    MongoDB <. AnalyzeFile : Sends data to store
+
+    WebUser == WebCSV
+    WebUser .. AnalyzePage : Provides Input \n (Includes rejecting file processing)
+    WebCSV ==> HomePage
+    HomePage ==> AnalyzeFile
+    AnalyzeFile ===> RivetFileAnalyzer : Return File Analysis
+    RivetFileAnalyzer ===> AnalyzeFile 
+    AnalyzeFile ==> AnalyzePage
+
+    AnalyzePage ==> ProcessFile
+    ProcessFile ===> RivetProcessor
+    RivetProcessor ===> ProcessFile : Return Processed File
+    DownloadPage <= ProcessFile
+    ModifiedWebCSV == DownloadPage
+    EndWebUser <== ModifiedWebCSV : downloads file
+
+    'FORMATTING FOR WEBUSER TO BE HAPPY
+    MongoDB -[hidden] HomePage
+    HomePage -[hidden] AnalyzePage
+    AnalyzePage -[hidden] DownloadPage
+
+@enduml

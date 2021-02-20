@@ -1,0 +1,80 @@
+@startuml Command Line Design
+actor CLIUser
+actor/ EndCLIUser
+' CLI files and artifacts
+    file CLI_CSV
+    file CLI_CSV_CLEANED
+
+node RivetCLI {
+        card Step1CLI [
+            <b>Analyze File </b>
+            Input: CSV file
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: Print to terminal with <i>RivetFileAnalyzer</i> output
+        ]
+        card StepHCLI [
+            <b>Approve File </b>
+            Input: User confirmation of columns to analyze
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: Starts <i>Process File</i> output
+        ]
+        card Step2CLI [
+            <b>Process File </b>
+            Input: CSV file, options from command line
+            Process: Defers to <i>RivetProcessor</i>
+            Output: ZIP containing:
+                    CSV (modified) with <i>RivetProcessor</i> output
+                    TXT with Rivet Analysis
+        ]
+        StepHCLI => Step2CLI
+    }
+
+component RosieRivet #FAC800 {
+        card RivetFileAnalyzer [
+            <b>RivetFileAnalyzer</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: CSV Size, Separator Used, 
+                    Column Types, CSV Injections Found
+        ]
+        card RivetProcessor [
+            <b>RivetProcessor</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: Processed CSV File, 
+                    Analysis Summary
+        ]
+        'within riveters, have Apply AND Analyze functions
+        component Riveters {
+            card Riveter [
+                <b>Riveter</b>
+                ..
+                <i>analyze</i>(Pandas Column)
+                <i>apply</i>(Pandas Column)
+            ]
+            card GeneDateRiveter
+            card LargeIntRiveter
+            card CSVInjectionRiveter
+            card DateFormatRiveter
+
+            Riveter -- GeneDateRiveter
+            Riveter -- LargeIntRiveter
+            Riveter -- CSVInjectionRiveter
+            Riveter -- DateFormatRiveter
+        }
+        RivetFileAnalyzer .. Riveter : utilizes
+        RivetProcessor .. Riveter : utilizes
+        
+    }
+
+    CLIUser -[hidden] EndCLIUser
+    CLIUser == CLI_CSV
+    CLIUser .. StepHCLI : Provides Input \n (Includes rejecting file processing)
+    CLI_CSV ==> Step1CLI
+    Step1CLI ===> RivetFileAnalyzer
+    RivetFileAnalyzer => StepHCLI
+    Step2CLI ===> RivetProcessor
+    CLI_CSV_CLEANED = RivetProcessor
+    EndCLIUser <== CLI_CSV_CLEANED : file saved in current directory
+
+@enduml

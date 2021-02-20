@@ -1,0 +1,83 @@
+@startuml Excel Design
+actor ExcelUser
+actor/ EndExcelUser
+' Excel files and artifacts
+    file ExcelCSV
+    file ExcelCSV_CLEANED
+
+node ExcelRunner  #008473 {
+        card Step1ER [
+            <b>Analyze File </b>
+            Input: Current worksheet
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: Side Panel with <i>RivetFileAnalyzer</i> output, 
+                        options to select
+        ]
+
+        card ApprovePanel [
+            <b>Approve Panel </b>
+            Input: User confirmation of columns to 
+                   analyze via side panel
+            Process: Defers to <i>RivetFileAnalyzer</i>
+            Output: Starts <i>Process File</i> output
+        ]
+        card Step2ER [
+             <b>Process File </b>
+            Input: Current worksheet, options selected from ribbon
+            Process: Defers to <i>RivetProcessor</i>
+            Output: 2 New sheets containing:
+                    1. Modified <i>RivetProcessor</i> output
+                    2. CSV with Rivet Analysis
+        ]
+        ApprovePanel => Step2ER
+    }
+
+component RosieRivet #FAC800 {
+        card RivetFileAnalyzer [
+            <b>RivetFileAnalyzer</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: CSV Size, Separator Used, 
+                    Column Types, CSV Injections Found
+        ]
+        card RivetProcessor [
+            <b>RivetProcessor</b>
+            Input: CSV file
+            Process: Defers to <i>Riveters</i>
+            Output: Processed CSV File, 
+                    Analysis Summary
+        ]
+        'within riveters, have Apply AND Analyze functions
+        component Riveters {
+            card Riveter [
+                <b>Riveter</b>
+                ..
+                <i>analyze</i>(Pandas Column)
+                <i>apply</i>(Pandas Column)
+            ]
+            card GeneDateRiveter
+            card LargeIntRiveter
+            card CSVInjectionRiveter
+            card DateFormatRiveter
+
+            Riveter -- GeneDateRiveter
+            Riveter -- LargeIntRiveter
+            Riveter -- CSVInjectionRiveter
+            Riveter -- DateFormatRiveter
+        }
+        RivetFileAnalyzer .. Riveter : utilizes
+        RivetProcessor .. Riveter : utilizes
+        
+    }
+
+    ExcelUser -[hidden] EndExcelUser
+    ExcelUser == ExcelCSV
+    ExcelUser .. ApprovePanel : Provides Input \n (Includes rejecting file processing)
+    ExcelCSV ==> Step1ER
+    Step1ER ===> RivetFileAnalyzer
+    RivetFileAnalyzer => ApprovePanel
+    Step2ER ===> RivetProcessor
+    ExcelCSV_CLEANED = RivetProcessor
+    EndExcelUser <== ExcelCSV_CLEANED : New sheet addeed to workbook
+
+@enduml

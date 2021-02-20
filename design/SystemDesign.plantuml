@@ -77,11 +77,11 @@
         ]
         
     }
-    component RosieRivet {
+    component RosieRivet #FAC800 {
         card RivetFileAnalyzer [
             <b>RivetFileAnalyzer</b>
             Input: CSV file
-            Process: internal
+            Process: Defers to <i>Riveters</i>
             Output: CSV Size, Separator Used, 
                     Column Types, CSV Injections Found
         ]
@@ -89,12 +89,17 @@
             <b>RivetProcessor</b>
             Input: CSV file
             Process: Defers to <i>Riveters</i>
-            Output: CSV Size, Separator Used, 
-                    Column Types, CSV Injections Found
+            Output: Processed CSV File, 
+                    Analysis Summary
         ]
         'within riveters, have Apply AND Analyze functions
         component Riveters {
-            card Riveter
+            card Riveter [
+                <b>Riveter</b>
+                ..
+                <i>analyze</i>(Pandas Column)
+                <i>apply</i>(Pandas Column)
+            ]
             card GeneDateRiveter
             card LargeIntRiveter
             card CSVInjectionRiveter
@@ -105,8 +110,8 @@
             Riveter -- CSVInjectionRiveter
             Riveter -- DateFormatRiveter
         }
-
-        RivetProcessor -- Riveter
+        RivetFileAnalyzer .. Riveter : utilizes
+        RivetProcessor .. Riveter : utilizes
         
     }
 

@@ -3,24 +3,18 @@
 title Example processFile(JSON) call
 'Handle Rivet creation
 Frontend -> RivetController: HTTP POST (JSON) processFile(JSON)
-RivetController -> RivetIO: parse(filecontents, args)
-RivetIO -> Rivet: Rivet(filecontents,riveters,confidence)
-Rivet --> RivetIO: Rivet
-RivetIO --> RivetController: Rivet
-
-'Apply Riveters
-RivetController -> Rivet: applyRivets()
-Rivet -> GeneDateRiveter: apply(column)
-GeneDateRiveter --> Rivet: rivetedColumn
-Rivet -> DateRiveter: apply(column)
-DateRiveter --> Rivet: rivetedColumn
-Rivet -> CSVInjectionRiveter: apply(column)
-CSVInjectionRiveter --> Rivet: rivetedColumn
-note right of Rivet: Continues for as many riveters as needed
+RivetController -> RivetProcessor: Rivet(filecontents,riveters,confidence)
+RivetProcessor -> GeneDateRiveter: apply(column)
+GeneDateRiveter --> RivetProcessor: rivetedColumn
+RivetProcessor -> DateRiveter: apply(column)
+DateRiveter --> RivetProcessor: rivetedColumn
+RivetProcessor -> CSVInjectionRiveter: apply(column)
+CSVInjectionRiveter --> RivetProcessor: rivetedColumn
+note right of RivetProcessor: Continues for as many riveters as needed
 ...
 
-RivetController -> Rivet: getFileContents()
-Rivet --> RivetController: DataFrame
+RivetController -> RivetProcessor: getFileContents()
+RivetProcessor --> RivetController: DataFrame
 RivetController --> Frontend: JSON
 
 @enduml
