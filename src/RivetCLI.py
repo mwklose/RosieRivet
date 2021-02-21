@@ -37,6 +37,6 @@ def writeFile(CSV, TXT):
     pass
 
 if __name__ == "__main__":
-    print(sys.argv)
+    print("ARGV", sys.argv)
     data_file = sys.argv[len(sys.argv) - 1]
     main()

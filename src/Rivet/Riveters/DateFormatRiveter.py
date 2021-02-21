@@ -1,9 +1,11 @@
 from . import Riveter
+
+#Child class of Riveter that checks for dates and standardizes them
 # @author MWK
 class DateFormatRiveter(Riveter.Riveter):
 
     def __init__(self):
-        pass
+        self.scream()
 
     def analyze(self, column):
         pass
@@ -12,4 +14,5 @@ class DateFormatRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        pass
+        print("I AM DATE FORMATTER!")
+        return

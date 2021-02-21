@@ -1,8 +1,8 @@
 from . import Riveter
 
-# Child class of Riveter that checks for potential harmful CSV injections
+#Child class of Riveter that checks for dates and standardizes them
 # @author MWK
-class CSVInjectionRiveter(Riveter.Riveter):
+class LocaleSeparatorRiveter(Riveter.Riveter):
 
     def __init__(self):
         self.scream()
@@ -14,5 +14,5 @@ class CSVInjectionRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        print("I AM CSV INJECTION!")
+        print("I AM LOCALE SEPARATOR!")
         return

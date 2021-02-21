@@ -1,9 +1,11 @@
 from . import Riveter
+
+# Child class of Riveter that checks for gene names that could be misread as dates by Excel
 # @author MWK
 class GeneDateRiveter(Riveter.Riveter):
 
     def __init__(self):
-        pass
+        self.scream()
 
     def analyze(self, column):
         pass
@@ -12,4 +14,5 @@ class GeneDateRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        pass
+        print("I AM GENE DATE")
+        return
