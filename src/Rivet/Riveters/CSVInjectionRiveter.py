@@ -5,6 +5,7 @@ from . import Riveter
 class CSVInjectionRiveter(Riveter.Riveter):
 
     def __init__(self):
+        self.register()
         self.scream()
 
     def analyze(self, column):
@@ -13,4 +14,7 @@ class CSVInjectionRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-print("I AM CSV INJECTION!")
+    def scream(self):
+        print("I AM CSV INJECTION!")
+
+CSVInjectionRiveter()

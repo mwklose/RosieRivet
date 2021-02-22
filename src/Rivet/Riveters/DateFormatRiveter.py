@@ -5,12 +5,17 @@ from . import Riveter
 class DateFormatRiveter(Riveter.Riveter):
 
     def __init__(self):
+        self.register()
         self.scream()
 
     def analyze(self, column):
+        
         pass
 
     def apply(self, column):
         pass
 
-print("I AM DATE FORMATTER!")
+    def scream(self):
+        print("I AM DATE FORMATTER!")
+
+DateFormatRiveter()

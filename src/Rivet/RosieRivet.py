@@ -1,16 +1,6 @@
 import rosie
 import sys
 from Rivet.Riveters import *
-# https://stackoverflow.com/questions/1057431/how-to-load-all-modules-in-a-folder
-# WE GON LOAD ALL THEM RIVETERS UP IN THIS HOE
-
-sRiveters = {
-    "GeneDateRiveter" : GeneDateRiveter.GeneDateRiveter(),
-    "LargeIntRiveter" : LargeIntRiveter.LargeIntRiveter(),
-    "CSVInjectionRiveter" : CSVInjectionRiveter.CSVInjectionRiveter(),
-    "DateFormatRiveter" : DateFormatRiveter.DateFormatRiveter(),
-    "LocaleSeparatorRiveter" : LocaleSeparatorRiveter.LocaleSeparatorRiveter()
-}
 
 # @author MWK
 class RosieRivet():
@@ -20,7 +10,7 @@ class RosieRivet():
         return
 
     def initializeRiveters(self):
-        return sRiveters.values()
+        return Riveter.getRiveters()
 
     #actual beginning of the analysis process, will go through each riveter and determine if this
         #CSV has the particular data type, marking column to be displayed to user in approveFile

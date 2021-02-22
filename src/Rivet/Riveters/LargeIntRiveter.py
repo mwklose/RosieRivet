@@ -5,6 +5,7 @@ from . import Riveter
 class LargeIntRiveter(Riveter.Riveter):
 
     def __init__(self):
+        self.register()
         self.scream()
 
     def analyze(self, column):
@@ -13,4 +14,7 @@ class LargeIntRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-print("I AM LARGE INT")
+    def scream(self):
+        print("I AM LARGE INT")
+
+LargeIntRiveter()
