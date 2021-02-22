@@ -13,6 +13,4 @@ class LargeIntRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-    def scream(self):
-        print("I AM LARGE INT")
-        return
+print("I AM LARGE INT")

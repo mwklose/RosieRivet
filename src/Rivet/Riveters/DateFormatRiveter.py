@@ -13,6 +13,4 @@ class DateFormatRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-    def scream(self):
-        print("I AM DATE FORMATTER!")
-        return
+print("I AM DATE FORMATTER!")

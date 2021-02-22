@@ -13,6 +13,4 @@ class CSVInjectionRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-    def scream(self):
-        print("I AM CSV INJECTION!")
-        return
+print("I AM CSV INJECTION!")

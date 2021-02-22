@@ -13,6 +13,4 @@ class GeneDateRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-    def scream(self):
-        print("I AM GENE DATE")
-        return
+print("I AM GENE DATE AND I HAVE BEEN CREATED")

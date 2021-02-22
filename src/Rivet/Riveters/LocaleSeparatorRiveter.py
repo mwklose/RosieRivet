@@ -13,6 +13,4 @@ class LocaleSeparatorRiveter(Riveter.Riveter):
     def apply(self, column):
         pass
 
-    def scream(self):
-        print("I AM LOCALE SEPARATOR!")
-        return
+print("I AM LOCALE SEPARATOR!")
