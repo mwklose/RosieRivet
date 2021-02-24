@@ -25,7 +25,7 @@ def analyzeFile(rr):
 def approveFile(rr, analysis):
     print("APPROVE FILE: ", analysis)
     return "CSV", "OPTIONS"
-    
+
 #if approved, file will be processed taking in the user input from approveFile to adjust columns
     #will return the exact columns that need to be protected that will then be written in writeFile
 def processFile(rr, myCSV, options):
