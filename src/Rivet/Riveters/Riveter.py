@@ -19,4 +19,3 @@ class Riveter:
 
     def register(self):
         sessionRiveters.append(self)
-

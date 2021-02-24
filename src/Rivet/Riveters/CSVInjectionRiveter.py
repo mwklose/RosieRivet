@@ -9,12 +9,13 @@ class CSVInjectionRiveter(Riveter.Riveter):
         self.scream()
 
     def analyze(self, column):
-        pass
+        return {}
 
     def apply(self, column):
         pass
 
     def scream(self):
-        print("I AM CSV INJECTION!")
+        print("CSVInjectionRiveter")
+        return "CSVInjectionRiveter"
 
 CSVInjectionRiveter()

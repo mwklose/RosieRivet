@@ -9,12 +9,12 @@ class LocaleSeparatorRiveter(Riveter.Riveter):
         self.scream()
 
     def analyze(self, column):
-        pass
+        return {}
 
     def apply(self, column):
         pass
 
     def scream(self):
-        print("I AM LOCALE SEPARATOR!")
-
+        print("LocaleSeparatorRiveter")
+        return "LocaleSeparatorRiveter"
 LocaleSeparatorRiveter()
