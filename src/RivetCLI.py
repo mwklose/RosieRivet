@@ -36,7 +36,13 @@ def processFile(rr, myCSV, options):
 def writeFile(CSV, TXT):
     pass
 
+
+# Runs the file only if directly called. 
 if __name__ == "__main__":
+    # Match all files in the system
+    files = [a for a in sys.argv if ".csv" in a]
+    silentMode = "-s" in sys.argv
     print("ARGV", sys.argv)
+    print("FILES:", files, "SILENTMODE=", silentMode)
     data_file = sys.argv[len(sys.argv) - 1]
     main()

@@ -3,8 +3,6 @@ sessionRiveters = []
 # @author MWK
 
 def getRiveters():
-    for sr in sessionRiveters:
-        sr.scream()
     return sessionRiveters
 
 class Riveter:
@@ -21,5 +19,4 @@ class Riveter:
 
     def register(self):
         sessionRiveters.append(self)
-        print(sessionRiveters)
 

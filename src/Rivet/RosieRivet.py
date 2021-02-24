@@ -10,6 +10,7 @@ class RosieRivet():
         return
 
     def initializeRiveters(self):
+        # Return all riveters defined by the session
         return Riveter.getRiveters()
 
     #actual beginning of the analysis process, will go through each riveter and determine if this
