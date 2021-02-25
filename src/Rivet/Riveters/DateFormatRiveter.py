@@ -15,7 +15,6 @@ class DateFormatRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        print("DateFormatRiveter")
         return "DateFormatRiveter"
 
 DateFormatRiveter()

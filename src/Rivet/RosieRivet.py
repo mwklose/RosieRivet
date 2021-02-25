@@ -7,10 +7,13 @@ from Rivet.Riveters import *
 class RosieRivet():
     def __init__(self, myfile, confidence=0.80):
         self.riveters = self.initializeRiveters()
-        self.csv = csv.DictReader(open(myfile))
+        # store filename; need to create multiple readers for each analysis
+        self.csv = myfile
+        
         self.confidence = confidence
         return
 
+    # Grabs all Riveters registered by the system
     def initializeRiveters(self):
         # Return all riveters defined by the session
         return Riveter.getRiveters()
@@ -21,13 +24,14 @@ class RosieRivet():
     def RivetFileAnalyzer(self):
         analysis = {}
         for r in self.riveters:
-            analysis[r.scream()] = r.analyze(self.csv)
-            
-            
+            newFileInstance = csv.DictReader(open(self.csv))
+            analysis[r.scream()] = r.analyze(newFileInstance)
 
         print(analysis)   
         return analysis
     #After file is approved will then be processed in some way \o/ \o/ \o/
-    def RivetProcessor(self, myCSV, riveters, confidence=0.8, outfile=""):
+    def RivetProcessor(self, options, confidence=0.8, outfile=""):
         print("IN RIVET PROCESSOR")
-        return
+        myCSV = {}
+        myTXT = {}
+        return myCSV, myTXT

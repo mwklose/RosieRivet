@@ -15,7 +15,6 @@ class CSVInjectionRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        print("CSVInjectionRiveter")
         return "CSVInjectionRiveter"
 
 CSVInjectionRiveter()

@@ -15,7 +15,6 @@ class LargeIntRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        print("LargeIntRiveter")
         return "LargeIntRiveter"
 
 LargeIntRiveter()

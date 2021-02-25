@@ -15,6 +15,5 @@ class LocaleSeparatorRiveter(Riveter.Riveter):
         pass
 
     def scream(self):
-        print("LocaleSeparatorRiveter")
         return "LocaleSeparatorRiveter"
 LocaleSeparatorRiveter()

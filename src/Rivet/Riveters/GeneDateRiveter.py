@@ -36,7 +36,6 @@ class GeneDateRiveter(Riveter.Riveter):
         return self.gene_date_analysis
     
     def scream(self):
-        print("GeneDateRiveter")
         return "GeneDateRiveter"
 
     def apply(self, column):
