@@ -151,6 +151,7 @@ def read_file_excel(data_file):
                         elem_arr.append(element)
                         continue
                     incon_type = row_keys[rows]["col_data"][i + 1]
+                    # THIS IS WHERE THE FIXING/MAGIC HAPPENS
                     remedy = find_remedy(element, incon_type, stats[i])
                     elem_arr.append(remedy)
                 outfile.write(",".join(elem_arr) + "\n")

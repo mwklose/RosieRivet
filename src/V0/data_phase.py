@@ -14,8 +14,8 @@ else:
     bytes23 = lambda s: bytes(s, encoding='UTF-8')
 
 def readFile(data_file):
-    librosiedir = './lib'
-    rosie.load(librosiedir, quiet=True)
+#     librosiedir = './lib'
+#     rosie.load(librosiedir, quiet=True)
     engine = rosie.engine()
     engine.import_package("date")
     date_patterns = engine.compile("date.any")
@@ -32,6 +32,7 @@ def readFile(data_file):
         csvfile.seek(0)    
         fileRead = csv.reader(csvfile, dialect=dial)
         keys = next(fileRead)
+        print("CSV file has these column headings: {}".format(keys))
         cols = len(keys)
         rows = 0
         date_found = []
@@ -43,8 +44,8 @@ def readFile(data_file):
         total_counter = [0] * cols
         date_check = engine.compile("{ { \"APR\" / \"OCT\" / \"MARCH\" / \"SEPT\" } [:digit:]* }")
         num_check = engine.compile("{ [0]+ [:digit:]+ } / [0]+")
-        #engine.compile("[0-9]{ 2 }")
-        excel_check = engine.compile("{ { date.month { \"-\" / [/] } date.short_year } / { date.day { \"-\" / [/] } date.month } }")
+        engine.load("short_year = [0-9]{ 2 }")
+        excel_check = engine.compile("{ { date.month { \"-\" / [/] } short_year } / { date.day { \"-\" / [/] } date.month } }")
         limit = r"[:digit:]{15,}"
         num_check1 = engine.compile(limit)
         #num_check2 = engine.compile("{ [:digit:]+ {\"e\" / \"E\"} {[\\-]? [:digit:]*}}")
@@ -74,6 +75,7 @@ def readFile(data_file):
         info["NOTADATE"] = date_found
         info["BIGNUM"] = num_found
         info["DATESTAT"] = [[a / c, b / c] for a, b, c in zip(date_counter, actual_date_counter, total_counter) ]
+        print(info["DATESTAT"])
     with open(data_file[0:len(data_file) - 4] + "_sorted.txt", 'w') as file:
         json.dump(all, file)
     return info
