@@ -36,4 +36,6 @@ class RosieRivet():
         print("IN RIVET PROCESSOR")
         myCSV = {}
         myTXT = {}
+        for r in self.riveters:
+            r.apply(csv.reader(open(self.csv)))
         return myCSV, myTXT

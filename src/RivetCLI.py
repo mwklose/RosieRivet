@@ -10,7 +10,7 @@ def main(file, silentMode):
 
     # Analyze File
     myAnalysis = analyzeFile(rr)
-
+    
     # Approve File
     options = approveFile(rr, myAnalysis, silentMode)
 
@@ -85,6 +85,8 @@ def approveFile(rr, analysis, silentMode):
                 if rc == "VIEW":
                     for k in sorted(analysis[r.scream()]['detected'].keys(), key=lambda e: e[1]):
                         print("%20s: %s" % (k, hits[k]))
+            
+
 
             
         
