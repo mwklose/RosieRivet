@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>RPL Rivet</title>
+    <style>
+      body {
+        font-family: "Lato", sans-serif;
+      }
+
+      /* The side navigation menu */
+      .sidebar {
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+        position: fixed;
+        height: 88%;
+        overflow: auto;
+      }
+      /* The bottom bar menu */
+      .bottombar {
+        margin: 0;
+        padding: 10px;
+        border-bottom: 7px solid white;
+        width: 100%;
+        bottom: 0;
+        height: 50px;
+        position: fixed;
+        background-color: #f1f1f1;
+      }
+
+      /* bottombar links */
+      .bottombar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+      }
+
+      /* Active/current link */
+      .bottombar a.active {
+        background-color: #002146;
+        color: white;
+      }
+
+      /* Links on mouse-over */
+      .bottombar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+      }
+
+      /* Sidebar links */
+      .sidebar a {
+        display: block;
+        color: black;
+        padding: 16px;
+        text-decoration: none;
+      }
+
+      /* Active/current link */
+      .sidebar a.active {
+        background-color: #002146;
+        color: white;
+      }
+
+      /* Links on mouse-over */
+      .sidebar a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+      }
+
+      /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+      div.content {
+        margin-left: 200px;
+        padding: 1px 16px;
+        height: 1000px;
+      }
+
+      /* On screens that are less than 700px wide, make the sidebar into a topbar */
+      @media screen and (max-width: 700px) {
+        .sidebar {
+          width: 100%;
+          height: auto;
+          position: relative;
+        }
+        .sidebar a {float: left;}
+        div.content {margin-left: 0;}
+      }
+
+      /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+      @media screen and (max-width: 400px) {
+        .sidebar a {
+          text-align: center;
+          float: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <a class="active" href="home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="excel.html">Excel Plugin</a>
+      <a href="cli.html">CLI Tool</a>
+    </div>
+    <div class="content">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+    <div class="bottombar">
+      <a>Copyright Thing</a>
+      <a href="linky">Privacy & Terms</a>
+      <a href="spicy link">Contact Us</a>
+    </div>
+  </body>
+</html>
