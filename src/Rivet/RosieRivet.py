@@ -3,6 +3,9 @@ import sys
 import csv
 from Rivet.Riveters import *
 
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
 # @author MWK
 class RosieRivet():
     def __init__(self, myfile, confidence=0.80):
@@ -24,10 +27,9 @@ class RosieRivet():
     def RivetFileAnalyzer(self):
         analysis = {}
         for r in self.riveters:
-            newFileInstance = csv.DictReader(open(self.csv))
-            analysis[r.scream()] = r.analyze(newFileInstance)
+            analysis[r.scream()] = r.analyze(self.csv)
 
-        print(analysis)   
+        pp.pprint(analysis) 
         return analysis
     #After file is approved will then be processed in some way \o/ \o/ \o/
     def RivetProcessor(self, options, confidence=0.8, outfile=""):

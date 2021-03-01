@@ -75,6 +75,7 @@ def readFile(data_file):
         info["NOTADATE"] = date_found
         info["BIGNUM"] = num_found
         info["DATESTAT"] = [[a / c, b / c] for a, b, c in zip(date_counter, actual_date_counter, total_counter) ]
+        print(info["DATESTAT"])
     with open(data_file[0:len(data_file) - 4] + "_sorted.txt", 'w') as file:
         json.dump(all, file)
     return info
