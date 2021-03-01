@@ -34,6 +34,8 @@ class RosieRivet():
     #After file is approved will then be processed in some way \o/ \o/ \o/
     def RivetProcessor(self, options, confidence=0.8, outfile=""):
         print("IN RIVET PROCESSOR")
+        print("OPTIONS=", pp.pprint(options))
+        print("PROCESS RIVETERS=", self.riveters)
         myCSV = {}
         myTXT = {}
         for r in self.riveters:

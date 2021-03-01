@@ -34,10 +34,12 @@ def approveFile(rr, analysis, silentMode):
     if silentMode:
         return analysis
     print("--------------------")
+    rivetsToRemove = []
     for r in rr.riveters:
         # See if riveting even possible
         if len(analysis[r.scream()]) == 0:
             print("No rivets for", r.scream())
+            rivetsToRemove.append(r)
             continue
 
         print("----------", "\nRivets detected for", r.scream())
@@ -57,21 +59,26 @@ def approveFile(rr, analysis, silentMode):
 
         if "y" in ans or "Y" in ans:
             rc = "START"
-            while rc != "DONE":
+            while rc.upper() != "DONE":
                 row = input("What ROWS would you like to remove from editing? (Type * for all rows, DONE to exit) ")
-                if row == "DONE":
+                if row.upper() == "DONE":
                     rc = "DONE"
                     continue
-    
+                # Validate row input
+                try:
+                    if row != "*":
+                        row = int(row)
+                except ValueError:
+                    print("Input should be integers or *.")
+                    continue
+
                 col = input("What COLUMNS would you like to remove from editing? (Type * for all columns, DONE to exit) ")
-                if col == "DONE":
+                if col.upper() == "DONE":
                     rc = "DONE"
                     continue
 
                 # Input validation: make sure correct row and column
                 try:
-                    if row != "*":
-                        row = int(row)
                     if col != "*":
                         col = int(col)
                 except ValueError:
@@ -79,19 +86,28 @@ def approveFile(rr, analysis, silentMode):
                     continue
                 
                 # Remove values from ANALYSIS
-                # TODO
+                remove = analysis[r.scream()]['detected'].keys()
+                if row != "*":
+                    remove = [k for k in remove if k[0] == row]
+                if col != "*":
+                    remove = [k for k in remove if k[1] == col]
+
+                # Iterate through all matches and remove them.
+                for i in remove:
+                    analysis[r.scream()]['detected'].pop(i)
 
                 rc = input("To view rows, type 'VIEW'. If finished, type 'DONE'. ")
-                if rc == "VIEW":
+                if rc.upper() == "VIEW":
                     for k in sorted(analysis[r.scream()]['detected'].keys(), key=lambda e: e[1]):
                         print("%20s: %s" % (k, hits[k]))
-            
 
-
-            
-        
+    # Filter out all unused riveters.
+    for rv in rivetsToRemove: 
+        rr.riveters.remove(rv)
+        analysis.pop(rv.scream())   
     # have access to analysis
     return analysis
+
 
 #if approved, file will be processed taking in the user input from approveFile to adjust columns
     #will return the exact columns that need to be protected that will then be written in writeFile
