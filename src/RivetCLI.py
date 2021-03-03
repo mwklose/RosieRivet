@@ -51,63 +51,71 @@ def approveFile(rr, analysis, silentMode):
             continue
 
         print("----------", "\nRivets detected for", r.scream())
-        ans = input("Would you like to view/edit them (Y/N)? ")
-            
-        # Handle viewing rows
-        if "y" in ans or "Y" in ans:
-            # flow if they answered yes: ask if they would like to edit any of them?
-            hits = analysis[r.scream()]['detected']
-            print("----------")
-            print("%20s: %s" % ("(row,col,col name)", "value detected"))
-            for k in sorted(hits.keys(), key=lambda e: e[1]):
-                print("%20s: %s" % (k, hits[k]))
-            
-            # handle editing rows
-            ans = input("Would you like to remove any values from the analysis (Y/N)? ")
+        # Want to get into format: ROW NAME --> EX1, EX2, EX3
 
-        if "y" in ans or "Y" in ans:
-            rc = "START"
-            while rc.upper() != "DONE":
-                row = input("What ROWS would you like to remove from editing? (Type * for all rows, DONE to exit) ")
-                if row.upper() == "DONE":
-                    rc = "DONE"
-                    continue
-                # Validate row input
+        # handle editing rows
+        rc = "START"
+        # Iterate until User decides to be done. 
+        while rc.upper() != "DONE":
+            printhits = {}
+            colnames = {}
+            for ov in analysis[r.scream()]['detected'].keys():
                 try:
-                    if row != "*":
-                        row = int(row)
-                except ValueError:
-                    print("Input should be integers or *.")
-                    continue
+                    # Key: Column name --> Value: Add example to list
+                    printhits[ov[1]].append("%10s" % analysis[r.scream()]['detected'][ov])
+                except KeyError:
+                    # If key error, list does not exist yet, so create list with first element. 
+                    # Key: Column name --> Value: Formatted List for values detected
+                    printhits[ov[1]] = ["%10s" % analysis[r.scream()]['detected'][ov]]
+                    # Keep track of column names for happy printing :)))))
+                    colnames[ov[1]] = ov[2]
+            # CLI show potential values to hit:
+            print()
+            for k in sorted(printhits.keys()):
+                print("%10s" % colnames[k], "(Column: %2d)" % k, "-->", printhits[k][:5])
+            print()
 
-                col = input("What COLUMNS would you like to remove from editing? (Type * for all columns, DONE to exit) ")
-                if col.upper() == "DONE":
-                    rc = "DONE"
-                    continue
+            # If there are no values in the list, then we are done with this approval.
+            if len(printhits.keys()) == 0:
+                rc = "DONE"
+                continue
 
-                # Input validation: make sure correct row and column
-                try:
-                    if col != "*":
-                        col = int(col)
-                except ValueError:
-                    print("Input should be integers or *.")
-                    continue
-                
-                # Remove values from ANALYSIS
-                remove = analysis[r.scream()]['detected'].keys()
-                if row != "*":
-                    remove = [k for k in remove if k[0] == row]
+            # Otherwise, if columns still left, ask if they want to remove them. 
+            ans = input("Would you like to remove any columns from the analysis (Y/N)? ")
+            # Short circuit if no removal is wanted.
+            if "y" not in ans and "Y" not in ans:
+                rc = "DONE"
+                continue
+            
+            # Ask for which columns to remove
+            col = input("What COLUMNS would you like to remove from editing? (Type * for all columns, DONE to exit) ")
+            if col.upper() == "DONE":
+                rc = "DONE"
+                continue
+
+            # Input validation: make sure correct row and column
+            try:
                 if col != "*":
-                    remove = [k for k in remove if k[1] == col]
+                    col = int(col)
+            except ValueError:
+                print("Input should be integers or *.")
+                continue
+            
+            # Remove values from ANALYSIS
+            # Get copy of list to remove values from; throws RunTimeError otherwise due to shallow copy of list
+            remove = list(analysis[r.scream()]['detected'].keys()).copy()
+            # If not all columns, then only remove values needed.
+            if col != "*":
+                remove = [k for k in remove if k[1] == col]
 
-                # Iterate through all matches and remove them.
-                for i in remove:
-                    analysis[r.scream()]['detected'].pop(i)
-
-                rc = input("To view rows, type 'VIEW'. If finished, type 'DONE'. ")
-                if rc.upper() == "VIEW":
-                    for k in sorted(analysis[r.scream()]['detected'].keys(), key=lambda e: e[1]):
-                        print("%20s: %s" % (k, hits[k]))
+            # Iterate through all matches and remove them.
+            for i in remove:
+                analysis[r.scream()]['detected'].pop(i)
+            
+            # Check if all values have been removed - this is okay. 
+            if len(analysis[r.scream()]['detected']) == 0:
+                rivetsToRemove.append(r)
+        print("----------")
 
     # Filter out all unused riveters.
     for rv in rivetsToRemove: 
