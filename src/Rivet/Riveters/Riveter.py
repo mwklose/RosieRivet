@@ -12,7 +12,7 @@ class Riveter:
     def analyze(cls, column): pass
 
     @classmethod
-    def apply(cls, column): pass
+    def apply(cls, csvFile, options, confidence): pass
 
     @classmethod
     def scream(cls):pass

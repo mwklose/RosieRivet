@@ -39,5 +39,5 @@ class RosieRivet():
         myCSV = {}
         myTXT = {}
         for r in self.riveters:
-            r.apply(csv.reader(open(self.csv)))
+            r.apply(csv.reader(open(self.csv)), options, confidence)
         return myCSV, myTXT

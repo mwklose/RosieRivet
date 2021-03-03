@@ -148,7 +148,7 @@ class GeneDateRiveter(Riveter.Riveter):
 
 
     #Processes file and outputs new file aimed to protect csv file against misinterpretation
-    def apply(self, csvFile):
+    def apply(self, csvFile, options, confidence):
         stats = self.gene_date_analysis["DATESTAT"]
         outfile = open("demo_modified.csv", "w")
         keys = next(csvFile)

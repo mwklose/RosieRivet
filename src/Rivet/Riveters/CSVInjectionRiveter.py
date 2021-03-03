@@ -11,7 +11,7 @@ class CSVInjectionRiveter(Riveter.Riveter):
     def analyze(self, column):
         return {}
 
-    def apply(self, column):
+    def apply(self, csvFile, options, confidence):
         pass
 
     def scream(self):
