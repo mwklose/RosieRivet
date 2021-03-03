@@ -2,6 +2,18 @@ from Rivet import RosieRivet
 import sys
 import pprint
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    REVERSED = '\u001b[7m'
+
 # Jennigns comments:
 # 1. Less fine grain control for users in CLI
 # 2. guarantee data structure (via abstract class, check when passing back)
@@ -45,11 +57,11 @@ def approveFile(rr, analysis, silentMode):
     for r in rr.riveters:
         # See if riveting even possible
         if len(analysis[r.scream()]) == 0:
-            print("No rivets for", r.scream())
+            print("No rivets for", bcolors.OKBLUE, r.scream(), bcolors.ENDC)
             rivetsToRemove.append(r)
             continue
 
-        print("----------", "\nRivets detected for", r.scream())
+        print("----------", "\nRivets detected for", bcolors.OKGREEN, r.scream(), bcolors.ENDC)
         # Want to get into format: ROW NAME --> EX1, EX2, EX3
 
         # handle editing rows
@@ -71,7 +83,7 @@ def approveFile(rr, analysis, silentMode):
             # CLI show potential values to hit:
             print()
             for k in sorted(printhits.keys()):
-                print("%10s" % colnames[k], "(Column: %2d)" % k, "-->", printhits[k][:5])
+                print(bcolors.BOLD, "%10s" % colnames[k], "(Column: %2d)" % k, bcolors.ENDC, "-->", printhits[k][:5])
             print()
 
             # If there are no values in the list, then we are done with this approval.
