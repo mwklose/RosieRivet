@@ -12,7 +12,6 @@ import pprint
 pp = pprint.PrettyPrinter(indent=4)
 
 def main(file, silentMode):
-    print("In main with", file)
     rr = RosieRivet.RosieRivet(file) # call constructor of RosieRivet
 
     # Analyze File
@@ -122,6 +121,7 @@ def approveFile(rr, analysis, silentMode):
         rr.riveters.remove(rv)
         analysis.pop(rv.scream())   
     # have access to analysis
+    print("--------------------")
     return analysis
 
 
