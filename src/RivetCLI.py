@@ -2,6 +2,13 @@ from Rivet import RosieRivet
 import sys
 import pprint
 
+# Jennigns comments:
+# 1. Less fine grain control for users in CLI
+# 2. guarantee data structure (via abstract class, check when passing back)
+# 3. guarantee key existence
+# 4. analyze only riveters?
+# 5. Demo riveter for researchers?
+
 pp = pprint.PrettyPrinter(indent=4)
 
 def main(file, silentMode):
@@ -33,6 +40,7 @@ def analyzeFile(rr):
 def approveFile(rr, analysis, silentMode):
     if silentMode:
         return analysis
+
     print("--------------------")
     rivetsToRemove = []
     for r in rr.riveters:
@@ -125,8 +133,6 @@ if __name__ == "__main__":
     files = [a for a in sys.argv if ".csv" in a]
     # Match silent mode
     silentMode = "-s" in sys.argv
-    print("ARGV", sys.argv)
-    print("FILES:", files, "SILENTMODE=", silentMode)
     for f in files:
         main(f, silentMode)
 
