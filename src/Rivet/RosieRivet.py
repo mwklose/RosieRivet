@@ -3,9 +3,11 @@ import sys
 import csv
 from Rivet.Riveters import *
 
+# import JSON to pass back from Rivet processor
+import json
 import pprint
 
-pp = pprint.PrettyPrinter(indent=4)
+pp = pprint.PrettyPrinter()
 # @author MWK
 class RosieRivet():
     def __init__(self, myfile, confidence=0.80):
@@ -30,9 +32,18 @@ class RosieRivet():
             analysis[r.scream()] = r.analyze(self.csv) 
         return analysis
     #After file is approved will then be processed in some way \o/ \o/ \o/
-    def RivetProcessor(self, options, confidence=0.8, outfile=""):
-        myCSV = {}
-        myTXT = {}
-        for r in self.riveters:
-            r.apply(csv.reader(open(self.csv)), options, confidence)
-        return myCSV, myTXT
+    def RivetProcessor(self, options, confidence=0.8, outfile="outfile"):
+        myOut = {}
+        with open(self.csv) as f:
+            for r in self.riveters:
+                # Hand in a CSV reader, seek back to the start guarantee after each one. 
+                r.apply(csv.reader(f), options, confidence)
+                f.seek(0)
+            
+            rowco = 0
+            for row in csv.DictReader(f):
+                myOut[rowco] = row
+                rowco += 1
+                
+        print(json.dumps(myOut, indent=4))
+        return json.dumps(myOut, indent=4), options
