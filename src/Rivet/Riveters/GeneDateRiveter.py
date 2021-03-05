@@ -30,7 +30,11 @@ class GeneDateRiveter(Riveter.Riveter):
     #Analyzes file, takes a given file and applies rosie date matching to detect elements that 
     #can be misinterpreted as dates.
     def analyze(self, csvFile):
-        csvReader = csv.reader(open(csvFile))
+        # Added by @mwk due to needing to check delimiter on test files. 
+        delimiter = self.sniffDelimiter(csvFile)
+        # Added definition for delimiter due to input reading errors. 
+        csvReader = csv.reader(open(csvFile), delimiter)
+        
         self.gene_date_analysis["detected"] = {}
         keys = next(csvReader)
         n = len(keys)

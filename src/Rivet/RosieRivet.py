@@ -31,6 +31,7 @@ class RosieRivet():
         for r in self.riveters:
             analysis[r.scream()] = r.analyze(self.csv) 
         return analysis
+        
     #After file is approved will then be processed in some way \o/ \o/ \o/
     def RivetProcessor(self, options, confidence=0.8, outfile="outfile"):
         myOut = {}
@@ -44,6 +45,5 @@ class RosieRivet():
             for row in csv.DictReader(f):
                 myOut[rowco] = row
                 rowco += 1
-                
-        print(json.dumps(myOut, indent=4))
+
         return json.dumps(myOut, indent=4), options

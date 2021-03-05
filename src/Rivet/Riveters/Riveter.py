@@ -1,3 +1,4 @@
+import csv
 #Parent class for all riveter types
 sessionRiveters = []
 # @author MWK
@@ -16,6 +17,10 @@ class Riveter:
 
     @classmethod
     def scream(cls):pass
+
+    # Define method to determine delimiter. 
+    def sniffDelimiter(self, csvFilePath):
+        return csv.Sniffer().sniff(open(csvFilePath).read(1024), delimiters=",;\t")
 
     def register(self):
         sessionRiveters.append(self)
