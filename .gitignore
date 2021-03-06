@@ -1,3 +1,5 @@
 .DS_Store
 src/Rivet/Riveters/__pycache__/
 src/Rivet/__pycache__/
+src/Rivet/*.csv
+src/Rivet/*.txt
