@@ -1,23 +1,15 @@
 
-badGenes = [
-    "SEPT1",
-    "MARCH1",
-    "CARS",
-    "WARS",
-    "MARS",
-    "SEPT2"
-]
-
-goodGenes = [
-    "SEPTIN1",
-    "MARCHF1",
-    "CARS1",
-    "WARS1",
-    "MARS1",
-    "SEPTIN2",
-    "VEGFR2"
-]
+badGenes = {
+    "SEPT1"     : "SEPTIN1",
+    "MARCH1"    : "MARCHF1",
+    "CARS"      : "CARS1",
+    "WARS"      : "WARS1",
+    "MARS"      : "MARS1",
+    "SEPT2"     : "SEPTIN2",
+}
+    
 def main():
+
     return []
 
 if __name__ == "__main__":
