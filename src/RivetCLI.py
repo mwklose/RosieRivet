@@ -80,10 +80,16 @@ def approveFile(rr, analysis, silentMode):
                     printhits[ov[1]] = ["%10s" % analysis[r.scream()]['detected'][ov]]
                     # Keep track of column names for happy printing :)))))
                     colnames[ov[1]] = ov[2]
+
             # CLI show potential values to hit:
             print()
             for k in sorted(printhits.keys()):
-                print(bcolors.BOLD, "%10s" % colnames[k], "(Column: %2d)" % k, bcolors.ENDC, "-->", printhits[k][:5])
+                print(bcolors.BOLD, # Bold face
+                        "%10s" % colnames[k],  # Column name
+                        "(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, analysis[r.scream()]['confidence'][k - 1], analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
+                        bcolors.ENDC, # End bold face
+                        "-->", # Arrow for pretty shapes
+                        printhits[k][:5]) # Print up to 5 examples
             print()
 
             # If there are no values in the list, then we are done with this approval.
