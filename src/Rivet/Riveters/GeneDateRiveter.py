@@ -184,26 +184,19 @@ class GeneDateRiveter(Riveter.Riveter):
     #Processes file and outputs new file aimed to protect csv file against misinterpretation
     def apply(self, csvFile, options, confidence):
         stats = self.gene_date_analysis["DATESTAT"]
-        outfile = open("demo_modified.csv", "w")
-        
-        keys = next(csvFile)
-        print(keys)
-        outfile.write(",".join(keys) + "\n")
-        cols = len(keys)
-
-        for row_count,row in enumerate(csvFile):
-            elem_arr = []
-            for i in range(0, cols):
-                element = row[i]
-                if (row_count+1,i+1) not in self.all:
-                    if "," in element:
-                        element = "\"" + element + "\""
-                    elem_arr.append(element)
-                    continue
-                incon_type = self.all[(row_count+1,i+1)]["type"]
-                remedy = self.find_remedy(element, incon_type, stats[i])
-                elem_arr.append(remedy)
-            outfile.write(",".join(elem_arr) + "\n")
-        outfile.close()
+        # Get all detections
+        detections = options[self.scream()]["detected"]
+        # Iterate through each detection
+        for k in detections.keys():
+            row = k[0] - 1
+            col = k[1] - 1
+            # Check against confidence
+            if 1 - stats[col][1] < confidence: 
+                # Get value by row and column
+                
+                value = csvFile[row][col] 
+                # Find remedy for row/column
+                csvFile[row][col] = "'" + value
+        return
 
 GeneDateRiveter()
