@@ -151,7 +151,6 @@ def processFile(rr, options):
 #begins process of writing the files after figuring out which should be processed from processFile
     #will return the final adjusted CSV file with the columns protected.
 def writeFile(CSV, TXT):
-
     with open("out.csv", "w") as cf:
         cw = csv.writer(cf)
         cw.writerows(CSV)

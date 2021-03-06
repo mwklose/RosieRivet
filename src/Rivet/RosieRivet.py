@@ -37,9 +37,7 @@ class RosieRivet():
         csvf = self.RivetReadCSV()
         for r in self.riveters:
             # Hand in a CSV reader, seek back to the start guarantee after each one. 
-            r.apply(csvf, options, confidence)
-        
-        pp.pprint(csvf)
+            csvf = r.apply(csvf, options, confidence)
         return csvf, options
     
     def RivetReadCSV(self):
