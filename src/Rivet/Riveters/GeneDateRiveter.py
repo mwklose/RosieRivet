@@ -25,8 +25,8 @@ class GeneDateRiveter(Riveter.Riveter):
         engine.import_package("date")
         self.date_patterns = engine.compile("date.any")
         engine.load("short_year = [0-9]{ 2 }")
-        self.date_check = [engine.compile("{ { \"APR\" / \"OCT\" / \"DEC\" / \"MARCH\" / \"SEPT\" / \"SEP\" } [:digit:]* }"), 
-                           engine.compile("{ { date.month { \"-\" / [/] } short_year} / { date.day { \"-\" / [/] } date.month } }")]
+        self.date_check = [engine.compile("{ { \"APR\" / \"OCT\" / \"DEC\" / \"MARCH\" / \"SEPT\" / \"SEP\" } [:digit:]* }")] #, 
+                           # engine.compile("{ { date.month { \"-\" / [/] } short_year} / { date.day { \"-\" / [/] } date.month } }")]
 
     #Analyzes file, takes a given file and applies rosie date matching to detect elements that 
     #can be misinterpreted as dates.
