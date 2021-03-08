@@ -15,13 +15,6 @@ class bcolors:
     UNDERLINE = '\033[4m'
     REVERSED = '\u001b[7m'
 
-# Jennigns comments:
-# 1. Less fine grain control for users in CLI
-# 2. guarantee data structure (via abstract class, check when passing back)
-# 3. guarantee key existence
-# 4. analyze only riveters?
-# 5. Demo riveter for researchers?
-
 pp = pprint.PrettyPrinter(indent=4)
 
 def main(file, silentMode):
