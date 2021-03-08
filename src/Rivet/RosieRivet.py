@@ -31,19 +31,19 @@ class RosieRivet():
         for r in self.riveters:
             analysis[r.scream()] = r.analyze(self.csv) 
         return analysis
-        
+
     #After file is approved will then be processed in some way \o/ \o/ \o/
     def RivetProcessor(self, options, confidence=0.8, outfile="outfile"):
-        myOut = {}
+        csvf = self.RivetReadCSV()
+        for r in self.riveters:
+            # Hand in a CSV reader, seek back to the start guarantee after each one. 
+            csvf = r.apply(csvf, options, confidence)
+        return csvf, options
+    
+    def RivetReadCSV(self):
+        out = []
+        delimiter = csv.Sniffer().sniff(open(self.csv).read(1024), delimiters=",;\t")
         with open(self.csv) as f:
-            for r in self.riveters:
-                # Hand in a CSV reader, seek back to the start guarantee after each one. 
-                r.apply(csv.reader(f), options, confidence)
-                f.seek(0)
-            
-            rowco = 0
-            for row in csv.DictReader(f):
-                myOut[rowco] = row
-                rowco += 1
-
-        return json.dumps(myOut, indent=4), options
+            for row in csv.reader(f, delimiter):
+                out.append(row)
+        return out

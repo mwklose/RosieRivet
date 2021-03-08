@@ -1,6 +1,7 @@
 from Rivet import RosieRivet
 import sys
 import pprint
+import csv, json
 
 class bcolors:
     HEADER = '\033[95m'
@@ -150,7 +151,14 @@ def processFile(rr, options):
 #begins process of writing the files after figuring out which should be processed from processFile
     #will return the final adjusted CSV file with the columns protected.
 def writeFile(CSV, TXT):
-    pass
+    with open("out.csv", "w") as cf:
+        cw = csv.writer(cf)
+        cw.writerows(CSV)
+
+    with open("out.txt", "w") as tf:
+       pprint.PrettyPrinter(indent=4, stream=tf).pprint(TXT)
+
+    return
 
 # Runs the file only if directly called. 
 if __name__ == "__main__":
