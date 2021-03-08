@@ -37,12 +37,15 @@ class RosieRivet():
         csvf = self.RivetReadCSV()
         for r in self.riveters:
             # Hand in a CSV reader, seek back to the start guarantee after each one. 
-            csvf = r.apply(csvf, options, confidence)
+            r.apply(csvf, options, confidence)
         return csvf, options
     
     def RivetReadCSV(self):
         out = []
-        delimiter = csv.Sniffer().sniff(open(self.csv).read(1024), delimiters=",;\t")
+        f = open(self.csv)
+        delimiter = csv.Sniffer().sniff(f.read(1024), delimiters=",;\t")
+        f.close()
+
         with open(self.csv) as f:
             for row in csv.reader(f, delimiter):
                 out.append(row)

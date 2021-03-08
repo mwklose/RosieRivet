@@ -23,7 +23,10 @@ class Riveter:
 
     # Define method to determine delimiter. 
     def sniffDelimiter(self, csvFilePath):
-        return csv.Sniffer().sniff(open(csvFilePath).read(1024), delimiters=",;\t")
+        f = open(csvFilePath)
+        sniff = csv.Sniffer().sniff(f.read(1024), delimiters=",;\t")
+        f.close()
+        return sniff
 
     # Define method to register for system. 
     def register(self):

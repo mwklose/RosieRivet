@@ -10,7 +10,6 @@ class FlowMethodTest(unittest.TestCase):
         rrr = RosieRivet.RosieRivet(filename)
         # Analyze file
         d = rrr.RivetFileAnalyzer()
-        print(d)
         # Get output from file as Row/Col pointer
         out, options = rrr.RivetProcessor(d)
         # Open the expected output file
@@ -21,8 +20,7 @@ class FlowMethodTest(unittest.TestCase):
             # Assert lines are fixed as intended
             for r in out:
                 s = next(csvreader)
-                print(r, s)
-                self.assertEquals(r, s)
+                self.assertEqual(r, s)
             f.close()
         return
 

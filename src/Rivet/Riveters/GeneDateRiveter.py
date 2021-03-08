@@ -34,6 +34,7 @@ class GeneDateRiveter(Riveter.Riveter):
         # Added by @mwk due to needing to check delimiter on test files. 
         delimiter = self.sniffDelimiter(csvFile)
         # Added definition for delimiter due to input reading errors. 
+        f = open(csvFile)
         csvReader = csv.reader(open(csvFile), delimiter)
         
         self.gene_date_analysis["detected"] = {}
@@ -76,6 +77,8 @@ class GeneDateRiveter(Riveter.Riveter):
         self.gene_date_analysis["confidence"] = [(a + 1) / (a + b + 1) for a, b, c in zip(date_counter, actual_date_counter, total_counter)]
         self.gene_date_analysis["hits"] = [a for a, b, c in zip(date_counter, actual_date_counter, total_counter)]
 
+        # Close file once finished
+        f.close()
         return self.gene_date_analysis
     
     def scream(self):
