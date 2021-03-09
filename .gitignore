@@ -5,3 +5,4 @@ src/Rivet/*.csv
 src/Rivet/*.txt
 */__pycache__/
 test/cli_script/__pycache__/
+test/cli_script/.coverage
