@@ -9,7 +9,9 @@ class LocaleSeparatorRiveter(Riveter.Riveter):
         self.scream()
 
     def analyze(self, column):
-        return {}
+        return {"detected" : {},
+                "confidence" : {},
+                "hits" : {}}
 
     def apply(self, csvFile, options, confidence):
         pass

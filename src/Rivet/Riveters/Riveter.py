@@ -8,8 +8,9 @@ def getRiveters():
 
 class Riveter:
     # Define a constructor in each Riveter. 
+    @classmethod
     def __init__(self):
-        pass
+        return
 
     # Analyze should pass back a dictionary with at least two keys: detected (potential errors) and confidence (fraction of errors in that column)
     @classmethod

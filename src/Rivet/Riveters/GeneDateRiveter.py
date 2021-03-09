@@ -11,7 +11,6 @@ class GeneDateRiveter(Riveter.Riveter):
     #Initialize Riveter along with rosie engine 
     def __init__(self):
         self.register()
-        self.scream()
         self.loadRosieEngine()
         self.gene_date_analysis = {}
         self.all = {}
@@ -34,41 +33,41 @@ class GeneDateRiveter(Riveter.Riveter):
         # Added by @mwk due to needing to check delimiter on test files. 
         delimiter = self.sniffDelimiter(csvFile)
         # Added definition for delimiter due to input reading errors. 
-        f = open(csvFile)
-        csvReader = csv.reader(open(csvFile), delimiter)
-        
-        self.gene_date_analysis["detected"] = {}
-        keys = next(csvReader)
-        n = len(keys)
-        date_counter = [0] * n
-        total_counter = [0] * n
-        actual_date_counter = [0] * n
+        with open(csvFile) as f: 
+            csvReader = csv.reader(f, delimiter)
+            
+            self.gene_date_analysis["detected"] = {}
+            keys = next(csvReader)
+            n = len(keys)
+            date_counter = [0] * n
+            total_counter = [0] * n
+            actual_date_counter = [0] * n
 
-        # Start rewrite for more pythonic: Mark
-        rn = 0
-        cn = 0
-        for row in csvReader:
-            for col in row:
-                # Keep count of elements if they exist
-                total_counter[cn] += 1
-
-                # Get count of total number of matched dates based on Rosie built-in
-                if(self.date_patterns.fullmatch(col.upper())):
-                    actual_date_counter[cn] += 1
-                    self.all[(rn+1,cn+1)] = {"row_no" : rn+1, "col_no":  cn + 1, "data" : col, "type": "ACTUALDATE"}
-                
-                # Check against known issues in Excel
-                if(any([check.fullmatch(col.upper()) for check in self.date_check])):
-                    date_counter[cn] += 1
-                    self.gene_date_analysis["detected"][(rn+1, cn+1, keys[cn].upper())] = col
-                    self.all[(rn+1,cn+1)]  = {"row_no" : rn+1, "col_no":  cn + 1, "data" : col, "type": "NOTADATE"}
-                
-                # Increase counter
-                cn += 1
-        
-            # Increase row number, reset column number
-            rn += 1
+            # Start rewrite for more pythonic: Mark
+            rn = 0
             cn = 0
+            for row in csvReader:
+                for col in row:
+                    # Keep count of elements if they exist
+                    total_counter[cn] += 1
+
+                    # Get count of total number of matched dates based on Rosie built-in
+                    if(self.date_patterns.fullmatch(col.upper())):
+                        actual_date_counter[cn] += 1
+                        self.all[(rn+1,cn+1)] = {"row_no" : rn+1, "col_no":  cn + 1, "data" : col, "type": "ACTUALDATE"}
+                    
+                    # Check against known issues in Excel
+                    if(any([check.fullmatch(col.upper()) for check in self.date_check])):
+                        date_counter[cn] += 1
+                        self.gene_date_analysis["detected"][(rn+1, cn+1, keys[cn].upper())] = col
+                        self.all[(rn+1,cn+1)]  = {"row_no" : rn+1, "col_no":  cn + 1, "data" : col, "type": "NOTADATE"}
+                    
+                    # Increase counter
+                    cn += 1
+            
+                # Increase row number, reset column number
+                rn += 1
+                cn = 0
 
         # Old written by Shawn:
         self.gene_date_analysis["DATESTAT"] = [[a / c, b / c] for a, b, c in zip(date_counter, actual_date_counter, total_counter) ]
@@ -77,8 +76,6 @@ class GeneDateRiveter(Riveter.Riveter):
         self.gene_date_analysis["confidence"] = [(a + 1) / (a + b + 1) for a, b, c in zip(date_counter, actual_date_counter, total_counter)]
         self.gene_date_analysis["hits"] = [a for a, b, c in zip(date_counter, actual_date_counter, total_counter)]
 
-        # Close file once finished
-        f.close()
         return self.gene_date_analysis
     
     def scream(self):
