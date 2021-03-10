@@ -9,9 +9,11 @@ class CSVInjectionRiveter(Riveter.Riveter):
         self.scream()
 
     def analyze(self, column):
-        return {}
+        return {"detected" : {},
+                "confidence" : {},
+                "hits" : {}}
 
-    def apply(self, column):
+    def apply(self, csvFile, options, confidence):
         pass
 
     def scream(self):

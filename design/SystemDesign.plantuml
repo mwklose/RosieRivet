@@ -1,5 +1,5 @@
 @startuml
-    'skinparam linetype polyline
+    skinparam FontSize 18
 
     'Three users, order them
     actor WebUser 
@@ -24,82 +24,25 @@
 
     'Three interfaces to run
     cloud Server {
-        card AnalyzeFile [
-            <b> AnalyzeFile </b>
-            Input: CSV file
-            Process: Defers to <i>RivetFileAnalyzer</i>
-            Output: JSON with <i>RivetFileAnalyzer</i> output
-        ]
-        card ProcessFile [
-            <b> ProcessFile </b>
-            Input: CSV file, JSON options (analyses, confidence level)
-            Process: Defers to <i>RivetProcessor</i>
-            Output: ZIP containing:
-                    CSV (modified) with <i>RivetProcessor</i> output
-                    TXT with Rivet Analysis
-        ]
+        card AnalyzeFile
+        card ProcessFile
     }
 
     node ExcelRunner {
-        card Step1ER [
-            <b>Step 1: </b> Analyze File
-            Input: Current worksheet
-            Process: Defers to <i>RivetFileAnalyzer</i>
-            Output: Side Panel with <i>RivetFileAnalyzer</i> output, 
-                        options to select
-        ]
-        card Step2ER [
-            <b>Step 2: </b> Process File
-            Input: Current worksheet, options selected from ribbon
-            Process: Defers to <i>RivetProcessor</i>
-            Output: 2 New sheets containing:
-                    1. Modified <i>RivetProcessor</i> output
-                    2. CSV with Rivet Analysis
-        ]
-        
-        
+        card AnalyzeFile_Excel
+        card ProcessFileExcel
     }
 
     node RivetCLI {
-        card Step1CLI [
-            <b>Step 1: </b> Analyze File
-            Input: CSV file
-            Process: Defers to <i>RivetFileAnalyzer</i>
-            Output: JSON with <i>RivetFileAnalyzer</i> output
-        ]
-        card Step2CLI [
-            <b>Step 2: </b> Process File
-            Input: CSV file, options from command line
-            Process: Defers to <i>RivetProcessor</i>
-            Output: ZIP containing:
-                    CSV (modified) with <i>RivetProcessor</i> output
-                    TXT with Rivet Analysis
-        ]
-        
+        card AnalyzeFile_CLI
+        card ProcessFile_CLI
     }
     component RosieRivet #FAC800 {
-        card RivetFileAnalyzer [
-            <b>RivetFileAnalyzer</b>
-            Input: CSV file
-            Process: Defers to <i>Riveters</i>
-            Output: CSV Size, Separator Used, 
-                    Column Types, CSV Injections Found
-        ]
-        card RivetProcessor [
-            <b>RivetProcessor</b>
-            Input: CSV file
-            Process: Defers to <i>Riveters</i>
-            Output: Processed CSV File, 
-                    Analysis Summary
-        ]
+        card RivetFileAnalyzer
+        card RivetProcessor
         'within riveters, have Apply AND Analyze functions
         component Riveters {
-            card Riveter [
-                <b>Riveter</b>
-                ..
-                <i>analyze</i>(Pandas Column)
-                <i>apply</i>(Pandas Column)
-            ]
+            card Riveter
             card GeneDateRiveter
             card LargeIntRiveter
             card CSVInjectionRiveter
@@ -133,8 +76,8 @@
     AnalyzeFile <-- HomePage
     
     AnalyzeFile --- RivetFileAnalyzer
-    Step1ER --- RivetFileAnalyzer
-    Step1CLI --- RivetFileAnalyzer
+    AnalyzeFile_Excel --- RivetFileAnalyzer
+    AnalyzeFile_CLI --- RivetFileAnalyzer
 
     AnalyzePage <-- AnalyzeFile
     WebUser ..> AnalyzePage : Provides input
@@ -143,8 +86,8 @@
     
     DownloadPage <-- ProcessFile
     ProcessFile --- RivetProcessor
-    Step2ER --- RivetProcessor
-    Step2CLI --- RivetProcessor
+    ProcessFileExcel --- RivetProcessor
+    ProcessFile_CLI --- RivetProcessor
 
 
     ModifiedWebCSV <-- DownloadPage

@@ -3,9 +3,11 @@ import sys
 import csv
 from Rivet.Riveters import *
 
+# import JSON to pass back from Rivet processor
+import json
 import pprint
 
-pp = pprint.PrettyPrinter(indent=4)
+pp = pprint.PrettyPrinter()
 # @author MWK
 class RosieRivet():
     def __init__(self, myfile, confidence=0.80):
@@ -27,17 +29,24 @@ class RosieRivet():
     def RivetFileAnalyzer(self):
         analysis = {}
         for r in self.riveters:
-            analysis[r.scream()] = r.analyze(self.csv)
-
-        pp.pprint(analysis) 
+            analysis[r.scream()] = r.analyze(self.csv) 
         return analysis
+
     #After file is approved will then be processed in some way \o/ \o/ \o/
-    def RivetProcessor(self, options, confidence=0.8, outfile=""):
-        print("IN RIVET PROCESSOR")
-        print("OPTIONS=", pp.pprint(options))
-        print("PROCESS RIVETERS=", self.riveters)
-        myCSV = {}
-        myTXT = {}
+    def RivetProcessor(self, options, confidence=0.8, outfile="outfile"):
+        csvf = self.RivetReadCSV()
         for r in self.riveters:
-            r.apply(csv.reader(open(self.csv)))
-        return myCSV, myTXT
+            # Hand in a CSV reader, seek back to the start guarantee after each one. 
+            r.apply(csvf, options, confidence)
+        return csvf, options
+    
+    def RivetReadCSV(self):
+        out = []
+        f = open(self.csv)
+        delimiter = csv.Sniffer().sniff(f.read(1024), delimiters=",;\t")
+        f.close()
+
+        with open(self.csv) as f:
+            for row in csv.reader(f, delimiter):
+                out.append(row)
+        return out
