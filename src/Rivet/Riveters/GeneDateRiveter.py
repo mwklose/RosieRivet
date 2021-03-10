@@ -95,7 +95,7 @@ class GeneDateRiveter(Riveter.Riveter):
             # Columns are 0-index; no labels on columns
             col = k[1] - 1
             # Check against confidence
-            if stats[col - 1] > confidence: 
+            if stats[col] > confidence: 
                 value = csvFile[row][col]  # Get value by row and column
                 csvFile[row][col] = "'" + value # Find remedy for row/column
         return csvFile

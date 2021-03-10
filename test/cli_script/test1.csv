@@ -1,10 +1,10 @@
-testnumber,Gene Name
-test1,APR1
-test1,works
-test1,MARCH2
-test1,APR1
-test1,works
-test1,MARCH2
-test1,APR1
-test1,works
-test1,MARCH2
+date,testnumber,Gene Name
+3/10/2021,test1,APR1
+2/10/2021,test1,works
+4/10/2020,test1,MARCH2
+1/5/2021,test1,APR1
+03/10/2021,test1,works
+2021-03-14,test1,MARCH2
+2021-03-07,test1,APR1
+2021-03-03,test1,works
+2021-03-02,test1,MARCH2

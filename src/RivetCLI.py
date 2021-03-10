@@ -50,7 +50,7 @@ def approveFile(rr, analysis, silentMode):
     rivetsToRemove = []
     for r in rr.riveters:
         # See if riveting even possible
-        if len(analysis[r.scream()]) == 0:
+        if sum(analysis[r.scream()]['hits']) == 0:
             print("No rivets for", bcolors.OKBLUE, r.scream(), bcolors.ENDC)
             rivetsToRemove.append(r)
             continue

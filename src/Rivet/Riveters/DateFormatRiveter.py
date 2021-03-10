@@ -1,44 +1,96 @@
 from . import Riveter
 import rosie
-#Child class of Riveter that checks for dates and standardizes them
+import csv
 
-def solve(elem):
-            return "\"=\"" + "\"" + elem + "\"" + "\"" + "\""
+# @author MWK
+# Child class of Riveter that checks for dates and standardizes them
+class DateFormatRiveter(Riveter.Riveter):
 
-def make_dates_uniform(date):
-    date = date.lower()
-    index_month = date.find(" ")
-    index_day = date.find(",")
-    return str(month_dict[date[0: index_month]]) + "/" + date[index_month + 1: index_day] + "/" + date[index_day + 2:]
+    def __init__(self):
+        self.register()
+        self.loadRosieEngine()
+        self.date_format_analysis = {}
+        self.all = {}
 
-#Given an element, according to stat provided, determines the correct way to remedy data in order to prevent
-#excel from possible misinterpretation 
-def find_remedy(self, elem, typ, stat):
-    THRESHOLD = 0.8
-    if typ == "NOTADATE":
-        if stat[1] >= THRESHOLD or (stat[1] != 0.0 and stat[1] + stat[0] >= 0.9):
-            return elem
-        else:
-            return solve(elem)
-    elif typ == "ACTUALDATE":
-        date = date_format(elem)
-        if "," in date:
-            date = make_dates_uniform(date)
-        return date
-    else:
-        return solve(elem)
+    #Loads rosie engine and date patterns to detect
+    def loadRosieEngine(self):
+        librosiedir = './lib'
+        rosie.load(librosiedir, quiet = True)
+        engine = rosie.engine()
+        engine.import_package("date")
+        self.date_patterns = engine.compile("date.any")
 
-#Determines the correct date to use
-def date_format(element):
-    #print(element)
-    librosiedir = './lib'
-    rosie.load(librosiedir, quiet=True)
-    engine = rosie.engine()
-    engine.import_package("date")
-    date_patterns = engine.compile("date.any")
-    match = date_patterns.fullmatch(element).rosie_match
+    def analyze(self, csvFile):
+        delimiter = self.sniffDelimiter(csvFile)
+        with open(csvFile) as f: 
+            csvReader = csv.reader(f, delimiter)
+            self.date_format_analysis['detected'] = {}
+            keys = next(csvReader)
+            n = len(keys)
+            date_counter = [0] * n
+            total_counter = [0] * n
+
+            # Keep row and column counter
+            rn = 0
+            cn = 0
+            for row in csvReader:
+                for col in row:
+                    # Keep count of elements if they exist
+                    total_counter[cn] += 1
+                    fm = self.date_patterns.fullmatch(col.upper())
+                    # Get count of total number of matched dates based on Rosie built-in
+                    if(fm):
+                        date_counter[cn] += 1
+                        match = fm.rosie_match
+                        self.date_format_analysis['detected'][(rn+1, cn+1, keys[cn].upper())] = col
+                        self.all[(rn+1, cn+1)] = {
+                            "row_no"    : rn+1, 
+                            "col_no"    : cn+1,
+                            "data"      : col,
+                            "type"      : match['subs'][0]['type'],
+                            "match"     : match
+                        }
+                    
+                    # Increase counter
+                    cn += 1
+            
+                # Increase row number, reset column number
+                rn += 1
+                cn = 0
+
+        # Add Confidence and number of hits per column
+        self.date_format_analysis["confidence"] = [d / t for d,t in zip(date_counter, total_counter)]
+        self.date_format_analysis["hits"] = [a for a in date_counter]
+
+        return self.date_format_analysis
+
+    def apply(self, csvFile, options, confidence):
+        stats = self.date_format_analysis["confidence"]
+        detections = options[self.scream()]["detected"]
+        for k in detections.keys():
+            row = k[0]
+            col = k[1] - 1
+            if stats[col] > confidence:
+                print(standardize_date(self.all[(row, col + 1)]))
+                csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
+        return
+
+    
+    def scream(self):
+        return "DateFormatRiveter"
+
+DateFormatRiveter()
+
+DAY = 0
+MONTH = 1
+YEAR = 2
+
+def standardize_date(element):
+    match = element['match']
     type_of_format = match['subs'][0]['type']
-    #print(type_of_format)
+    # Handle Dashed Dates: 2020-04-20
+    if type_of_format == "date.dashed":
+        return match["data"] # Return value, already standardized
     if type_of_format == "date.us_long":
         #print("us long")
         if match['subs'][0]['subs'][0]['type'] == "date.day_name":
@@ -57,30 +109,9 @@ def date_format(element):
     elif type_of_format == "date.rfc2822" and "," in element:
         #print("big rfc")
         index = element.rindex(",")
-        return date_format(element[index + 1:].strip())
+        return "RFC TO DO"
     elif type_of_format == "date.us_short":
         #print(match['subs'][0]['subs'])
         return match['subs'][0]['subs'][1]['data'] + " " + match['subs'][0]['subs'][0]['data'] + ", " + match['subs'][0]['subs'][2]['data']
-    return element
+    return match
     
-# @author MWK
-class DateFormatRiveter(Riveter.Riveter):
-
-    def __init__(self):
-        self.register()
-        self.scream()
-
-    def analyze(self, column):
-        return {"detected" : {},
-                "confidence" : {},
-                "hits" : {}}
-
-    def apply(self, csvFile, options, confidence):
-        pass
-
-    def scream(self):
-        return "DateFormatRiveter"
-    
-
-
-DateFormatRiveter()
