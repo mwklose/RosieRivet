@@ -18,7 +18,11 @@ class DateFormatRiveter(Riveter.Riveter):
         rosie.load(librosiedir, quiet = True)
         engine = rosie.engine()
         engine.import_package("date")
+        engine.import_package("char")
+        # Use Rosie Built-in date types for recognition
         self.date_patterns = engine.compile("date.any")
+        # Rosie missing functionality for little-endian dates; 
+        self.little_endian = engine.compile("{date.day .[:space:]? date.month .[:space:]? date.year .?}")
 
     def analyze(self, csvFile):
         delimiter = self.sniffDelimiter(csvFile)
@@ -45,23 +49,44 @@ class DateFormatRiveter(Riveter.Riveter):
                         self.date_format_analysis['detected'][(rn+1, cn+1, keys[cn].upper())] = col
                         # Get match via Rosie, and save some important info/type
                         match = fm.rosie_match
-                        date_counter[cn] += 1 if match['type'] == "date.any" else 0
                         t = match['subs'][0]['type']
+                        date_counter[cn] += 1 if match['type'] == "date.any" else 0
                         # Keep track of what types are in each column; should be consistent across worksheet???
                         try:
                             self.date_format_analysis['types'][t] += 1
                         except KeyError:
                             self.date_format_analysis['types'][t] = 1
-
+                        # Add entry to all potential matches
                         self.all[(rn+1, cn+1)] = {
                             "row_no"    : rn+1, 
                             "col_no"    : cn+1,
                             "data"      : col,
-                            "type"      : t,
+                            "type"      : t, # Gets the type of match
                             "match"     : match
                         }
+                    # If has potential to be date, then
                     elif any(char.isdigit() for char in col):
-                        print(col)
+                        # If potential date, compare to little endian
+                        fm = self.little_endian.fullmatch(col.upper())
+                        if(fm):
+                            self.date_format_analysis['detected'][(rn+1, cn+1, keys[cn].upper())] = col
+                            try:
+                                self.date_format_analysis['types']["date.littleEndian"] += 1
+                            except KeyError:
+                                self.date_format_analysis['types']["date.littleEndian"] = 1
+                                
+                            self.all[(rn+1, cn+1)] = {
+                                "row_no"    : rn+1, 
+                                "col_no"    : cn+1,
+                                "data"      : col,
+                                "type"      : "date.littleEndian", # Define own match type
+                                "match"     : match
+                            }
+                        # Debug print statement: TODO remove
+                        else:
+                            print(col)
+                            
+
                     # Increase counter
                     cn += 1
             
@@ -81,7 +106,7 @@ class DateFormatRiveter(Riveter.Riveter):
         for k in detections.keys():
             row = k[0]
             col = k[1] - 1
-            print(standardize_date(self.all[(row, col + 1)]))
+            # print(standardize_date(self.all[(row, col + 1)]))
             csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
             # if stats[col] > confidence:
             #     print(standardize_date(self.all[(row, col + 1)]))
@@ -99,49 +124,18 @@ L_DAY, L_MONTH, L_YEAR = 0, 1, 2
 B_YEAR, B_MONTH, B_DAY = 0, 1, 2
 
 def standardize_date(element):
-    match = element['match']
-    type_of_format = match['subs'][0]['type']
-    # Handle Dashed Dates: 2020-04-20
-    if type_of_format == "date.dashed":
-        print(type_of_format, match)
-        day = match["subs"][0]["subs"][B_DAY]['data']
-        month = match["subs"][0]["subs"][B_MONTH]['data']
-        year = match["subs"][0]["subs"][B_YEAR]['data']
-        return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
-    # Handle US Slashed dates: 3/10/2021
-    if type_of_format == "date.us_slashed":
-        day = match["subs"][0]["subs"][M_DAY]['data']
-        month = match["subs"][0]["subs"][M_MONTH]['data']
-        year = match["subs"][0]["subs"][M_YEAR]['data']
-        return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
-    if type_of_format == "date.eur":
-        day = match["subs"][0]["subs"][L_DAY]['data']
-        month = match["subs"][0]["subs"][L_MONTH]['data']
-        year = match["subs"][0]["subs"][L_YEAR]['data']
-        return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
-    print("--->", type_of_format, match)
+    # Initialize strings for later concatenation
+    year, month, day = "0", "0", "0"
 
-    if type_of_format == "date.us_long":
-        #print("us long")
-        if match['subs'][0]['subs'][0]['type'] == "date.day_name":
-            return match['subs'][0]['subs'][1]['data'] + " " + match['subs'][0]['subs'][2]['data'] + ", " + match['subs'][0]['subs'][3]['data']
-        else:
-            return match['subs'][0]['subs'][0]['data'] + " " + match['subs'][0]['subs'][1]['data'] + ", " + match['subs'][0]['subs'][2]['data']
-    elif type_of_format == "date.eur":
-        #print("europe")
-        return match['subs'][0]['subs'][1]['data'] + "/" + match['subs'][0]['subs'][0]['data'] + "/" + match['subs'][0]['subs'][2]['data']
-    elif type_of_format == "date.spaced":
-        #print("spaced")
-        return element.replace(" ", "/")
-    elif type_of_format == "date.spaced_en" or (type_of_format == "date.rfc2822" and "," not in element):
-        #print("eng or rfc")
-        return match['subs'][0]['subs'][1]['data'] + " " + match['subs'][0]['subs'][2]['data'] + ", " + match['subs'][0]['subs'][0]['data']
-    elif type_of_format == "date.rfc2822" and "," in element:
-        #print("big rfc")
-        index = element.rindex(",")
-        return "RFC TO DO"
-    elif type_of_format == "date.us_short":
-        #print(match['subs'][0]['subs'])
-        return match['subs'][0]['subs'][1]['data'] + " " + match['subs'][0]['subs'][0]['data'] + ", " + match['subs'][0]['subs'][2]['data']
-    return match
+    # Loop through each SUB match to gather day, month, and year.
+    # This is less efficient, but more comprehensive if Rosie gains more support for more date types.
+    for val in element['match']["subs"][0]["subs"]:
+        if "day" in val['type']:
+            day = val['data']
+        if "month" in val['type']:
+            month = val['data']
+        if "year" in val['type']:
+            year = val['data']
+    print("{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day), "OLD:", element['data'])
+    return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
     
