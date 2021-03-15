@@ -14,10 +14,10 @@ class Riveter:
 
     # Analyze should pass back a dictionary with at least two keys: detected (potential errors) and confidence (fraction of errors in that column)
     @classmethod
-    def analyze(cls, column): pass
+    def analyze(cls, csvFileDescriptor): pass
 
     @classmethod
-    def apply(cls, csvFile, options, confidence): pass
+    def apply(cls, csvFileAsListOfLists, options, confidence): pass
 
     @classmethod
     def scream(cls):pass
@@ -32,3 +32,16 @@ class Riveter:
     # Define method to register for system. 
     def register(self):
         sessionRiveters.append(self)
+
+
+    # Jennings suggestions:
+    # Make a min-max riveter (analysis only), shows extensibility
+    # Make design that offers to not fix anything
+    # SYLK riveter?
+    # Max file size riveter?
+    # Offer more than one way to fix something?
+    # Design issue: how does a riveter know what is in a column?
+
+    # Assume homogenous columns for scientific data
+    # "Typical spreadsheets" not one of our use cases, simplifies code somewhat
+    # Find actual examples from real life?

@@ -24,7 +24,15 @@ class DateFormatRiveter(Riveter.Riveter):
         # Rosie missing functionality for little-endian dates; 
         self.little_endian = engine.compile("{date.day .[:space:]? date.month .[:space:]? date.year .?}")
 
+        # Define own RPL file (use date.rpl) --> future PR into Rosie?
+
     def analyze(self, csvFile):
+
+        # Define ambiguous date-month formats? Can be hardcoded based on stress-test
+        # Show ambiguous analysis, get user input???
+        # n number entries in ambiguous, interpret in certain style=all valid
+            # Case: interpret all as US, see if valid, interpret all as EU, see if valid
+            # Otherwise, make known that not interpreted
         delimiter = self.sniffDelimiter(csvFile)
         with open(csvFile) as f: 
             csvReader = csv.reader(f, delimiter)
@@ -69,6 +77,7 @@ class DateFormatRiveter(Riveter.Riveter):
                         # If potential date, compare to little endian
                         fm = self.little_endian.fullmatch(col.upper())
                         if(fm):
+                            date_counter[cn] += 1
                             self.date_format_analysis['detected'][(rn+1, cn+1, keys[cn].upper())] = col
                             try:
                                 self.date_format_analysis['types']["date.littleEndian"] += 1
@@ -82,7 +91,7 @@ class DateFormatRiveter(Riveter.Riveter):
                                 "type"      : "date.littleEndian", # Define own match type
                                 "match"     : match
                             }
-                        # Debug print statement: TODO remove
+                        # # Debug print statement: TODO remove
                         else:
                             print(col)
                             
@@ -106,11 +115,9 @@ class DateFormatRiveter(Riveter.Riveter):
         for k in detections.keys():
             row = k[0]
             col = k[1] - 1
-            # print(standardize_date(self.all[(row, col + 1)]))
-            csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
-            # if stats[col] > confidence:
+            if stats[col] > confidence:
             #     print(standardize_date(self.all[(row, col + 1)]))
-            #     csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
+                csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
         return
 
     
@@ -119,9 +126,9 @@ class DateFormatRiveter(Riveter.Riveter):
 
 DateFormatRiveter()
 
-M_MONTH, M_DAY, M_YEAR = 0, 1, 2
-L_DAY, L_MONTH, L_YEAR = 0, 1, 2
-B_YEAR, B_MONTH, B_DAY = 0, 1, 2
+# M_MONTH, M_DAY, M_YEAR = 0, 1, 2
+# L_DAY, L_MONTH, L_YEAR = 0, 1, 2
+# B_YEAR, B_MONTH, B_DAY = 0, 1, 2
 
 def standardize_date(element):
     # Initialize strings for later concatenation
@@ -136,6 +143,6 @@ def standardize_date(element):
             month = val['data']
         if "year" in val['type']:
             year = val['data']
-    print("{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day), "OLD:", element['data'])
+    print("{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day), "OLD:", element['data'], "ELEMENT:", element)
     return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
     
