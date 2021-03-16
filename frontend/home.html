@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+<link rel="stylesheet" href="style.css"/>
+<script src="rosie.js"></script>
   <head>
     <meta charset="utf-8">
     <title>RPL Rivet</title>
@@ -12,19 +14,17 @@
       <a href="excel.html">Excel Plugin</a>
       <a href="cli.html">CLI Tool</a>
     </div>
-    <div class="content">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-      Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-      Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </div>
-    <div id="drop-area"> <!-- AHHHHHHHHHHHHHHHH, i mean yes i am liberal but meant library o okay lol-->
-      <form class="my-form">
-        <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p>
-        <input type="file" id="fileElem" multiple accept="image/*" onchange="handleFiles(this.files)">
-        <label class="button" for="fileElem">Select some files</label>
-      </form>
-    </div>
+
+    <div id="upzone"> Drop Files Here </div>
+
+    <!-- (C) UPLOAD STATUS -->
+    <div id="upstat"></div>
+
+  <!-- (D) FALLBACK -->
+    <form id="upform" action="rosie.php" method="post" enctype="multipart/form-data">
+      <input type="file" name="upfile" accept="image/*" required>
+      <input type="submit" value="Upload File">
+    </form>
     <div id="root"></div>
     <div class="bottombar">
       <a>Copyright Thing</a>
