@@ -93,7 +93,8 @@ class DateFormatRiveter(Riveter.Riveter):
                             }
                         # # Debug print statement: TODO remove
                         else:
-                            print(col)
+                            pass
+                            # print(col)
                             
 
                     # Increase counter
@@ -106,7 +107,6 @@ class DateFormatRiveter(Riveter.Riveter):
         # Add Confidence and number of hits per column
         self.date_format_analysis["confidence"] = [d / t for d,t in zip(date_counter, total_counter)]
         self.date_format_analysis["hits"] = [a for a in date_counter]
-        print("MAX TYPE IS:", max(self.date_format_analysis["types"], key=self.date_format_analysis["types"].get))
         return self.date_format_analysis
 
     def apply(self, csvFile, options, confidence):
@@ -116,7 +116,6 @@ class DateFormatRiveter(Riveter.Riveter):
             row = k[0]
             col = k[1] - 1
             if stats[col] > confidence:
-            #     print(standardize_date(self.all[(row, col + 1)]))
                 csvFile[row][col] = standardize_date(self.all[(row, col + 1)])
         return
 
@@ -125,10 +124,6 @@ class DateFormatRiveter(Riveter.Riveter):
         return "DateFormatRiveter"
 
 DateFormatRiveter()
-
-# M_MONTH, M_DAY, M_YEAR = 0, 1, 2
-# L_DAY, L_MONTH, L_YEAR = 0, 1, 2
-# B_YEAR, B_MONTH, B_DAY = 0, 1, 2
 
 def standardize_date(element):
     # Initialize strings for later concatenation
@@ -143,6 +138,5 @@ def standardize_date(element):
             month = val['data']
         if "year" in val['type']:
             year = val['data']
-    print("{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day), "OLD:", element['data'], "ELEMENT:", element)
     return "{0:>04s}-{1:>02s}-{2:>02s}".format(year, month, day)
     

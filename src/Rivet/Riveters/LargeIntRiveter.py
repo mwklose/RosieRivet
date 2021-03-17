@@ -38,7 +38,6 @@ class LargeIntRiveter(Riveter.Riveter):
             rn = 0
             cn = 0
             for e in self.engines:
-                print(e)
                 for row in csvReader:
                     for col in row:
                         # Keep count of elements if they exist
@@ -71,7 +70,6 @@ class LargeIntRiveter(Riveter.Riveter):
         
         self.large_int_analysis["confidence"] = [d / t for d,t in zip(error_counter, total_counter)]
         self.large_int_analysis["hits"] = [a for a in error_counter]
-        print(self.large_int_analysis["hits"])
         return self.large_int_analysis
 
     def apply(self, csvFile, options, confidence):
@@ -81,7 +79,6 @@ class LargeIntRiveter(Riveter.Riveter):
             row = k[0]
             col = k[1] - 1
             if stats[col] > confidence:
-                print('\'{}'.format(csvFile[row][col]))
                 csvFile[row][col] = '\'{:s}'.format(csvFile[row][col])
         return
 
