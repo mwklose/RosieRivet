@@ -9,7 +9,7 @@ def getRiveters():
 class Riveter:
     # Define a constructor in each Riveter. 
     @classmethod
-    def __init__(self):
+    def __init__(cls):
         return
 
     # Analyze should pass back a dictionary with at least two keys: detected (potential errors) and confidence (fraction of errors in that column)
@@ -20,12 +20,16 @@ class Riveter:
     def apply(cls, csvFileAsListOfLists, options, confidence): pass
 
     @classmethod
-    def scream(cls):pass
+    def scream(cls): pass
 
     # Define method to determine delimiter. 
     def sniffDelimiter(self, csvFilePath):
-        f = open(csvFilePath)
-        sniff = csv.Sniffer().sniff(f.read(1024), delimiters=",;\t")
+        f = open(csvFilePath, 'r')
+        try:
+            sniff = csv.Sniffer().sniff(f.read(2048))
+        except:
+            print("$$$$", csvFilePath)
+            sniff = ","
         f.close()
         return sniff
 

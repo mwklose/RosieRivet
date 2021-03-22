@@ -1,0 +1,47 @@
+1000E132
+test1
+APR1
+1001E532
+test1
+1010E632
+test1
+MARCH2
+1011E732
+test1
+APR1
+1100E232
+test1
+1101E132
+test1
+MARCH2
+1110E032
+test1
+APR1
+1111E532
+test1
+2000E432
+test1
+MARCH2
+MAX TYPE IS: date.us_slashed
+sci_notation
+leading_zero
+long_integer
+[9, 0, 0, 0]
+2021-03-10 OLD: 3/10/2021 ELEMENT: {'row_no': 1, 'col_no': 2, 'data': '3/10/2021', 'type': 'date.us_slashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.us_slashed', 's': 1, 'subs': [{'type': 'date.month', 's': 1, 'e': 2, 'data': '3'}, {'type': 'date.day', 's': 3, 'e': 5, 'data': '10'}, {'type': 'date.short_long_year', 's': 6, 'e': 10, 'data': '2021'}], 'e': 10, 'data': '3/10/2021'}], 'e': 10, 'data': '3/10/2021'}}
+2021-02-10 OLD: 2/10/2021 ELEMENT: {'row_no': 2, 'col_no': 2, 'data': '2/10/2021', 'type': 'date.us_slashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.us_slashed', 's': 1, 'subs': [{'type': 'date.month', 's': 1, 'e': 2, 'data': '2'}, {'type': 'date.day', 's': 3, 'e': 5, 'data': '10'}, {'type': 'date.short_long_year', 's': 6, 'e': 10, 'data': '2021'}], 'e': 10, 'data': '2/10/2021'}], 'e': 10, 'data': '2/10/2021'}}
+2020-04-10 OLD: 4/10/2020 ELEMENT: {'row_no': 3, 'col_no': 2, 'data': '4/10/2020', 'type': 'date.us_slashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.us_slashed', 's': 1, 'subs': [{'type': 'date.month', 's': 1, 'e': 2, 'data': '4'}, {'type': 'date.day', 's': 3, 'e': 5, 'data': '10'}, {'type': 'date.short_long_year', 's': 6, 'e': 10, 'data': '2020'}], 'e': 10, 'data': '4/10/2020'}], 'e': 10, 'data': '4/10/2020'}}
+2021-01-05 OLD: 1/5/2021 ELEMENT: {'row_no': 4, 'col_no': 2, 'data': '1/5/2021', 'type': 'date.us_slashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.us_slashed', 's': 1, 'subs': [{'type': 'date.month', 's': 1, 'e': 2, 'data': '1'}, {'type': 'date.day', 's': 3, 'e': 4, 'data': '5'}, {'type': 'date.short_long_year', 's': 5, 'e': 9, 'data': '2021'}], 'e': 9, 'data': '1/5/2021'}], 'e': 9, 'data': '1/5/2021'}}
+2021-03-10 OLD: 03/10/2021 ELEMENT: {'row_no': 5, 'col_no': 2, 'data': '03/10/2021', 'type': 'date.us_slashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.us_slashed', 's': 1, 'subs': [{'type': 'date.month', 's': 1, 'e': 3, 'data': '03'}, {'type': 'date.day', 's': 4, 'e': 6, 'data': '10'}, {'type': 'date.short_long_year', 's': 7, 'e': 11, 'data': '2021'}], 'e': 11, 'data': '03/10/2021'}], 'e': 11, 'data': '03/10/2021'}}
+2021-03-14 OLD: 2021-03-14 ELEMENT: {'row_no': 6, 'col_no': 2, 'data': '2021-03-14', 'type': 'date.dashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.dashed', 's': 1, 'subs': [{'type': 'date.year', 's': 1, 'e': 5, 'data': '2021'}, {'type': 'date.month', 's': 6, 'e': 8, 'data': '03'}, {'type': 'date.day', 's': 9, 'e': 11, 'data': '14'}], 'e': 11, 'data': '2021-03-14'}], 'e': 11, 'data': '2021-03-14'}}
+2021-03-07 OLD: 2021-03-07 ELEMENT: {'row_no': 7, 'col_no': 2, 'data': '2021-03-07', 'type': 'date.dashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.dashed', 's': 1, 'subs': [{'type': 'date.year', 's': 1, 'e': 5, 'data': '2021'}, {'type': 'date.month', 's': 6, 'e': 8, 'data': '03'}, {'type': 'date.day', 's': 9, 'e': 11, 'data': '07'}], 'e': 11, 'data': '2021-03-07'}], 'e': 11, 'data': '2021-03-07'}}
+2021-03-03 OLD: 2021-03-03 ELEMENT: {'row_no': 8, 'col_no': 2, 'data': '2021-03-03', 'type': 'date.dashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.dashed', 's': 1, 'subs': [{'type': 'date.year', 's': 1, 'e': 5, 'data': '2021'}, {'type': 'date.month', 's': 6, 'e': 8, 'data': '03'}, {'type': 'date.day', 's': 9, 'e': 11, 'data': '03'}], 'e': 11, 'data': '2021-03-03'}], 'e': 11, 'data': '2021-03-03'}}
+2021-03-02 OLD: 2021-03-02 ELEMENT: {'row_no': 9, 'col_no': 2, 'data': '2021-03-02', 'type': 'date.dashed', 'match': {'type': 'date.any', 's': 1, 'subs': [{'type': 'date.dashed', 's': 1, 'subs': [{'type': 'date.year', 's': 1, 'e': 5, 'data': '2021'}, {'type': 'date.month', 's': 6, 'e': 8, 'data': '03'}, {'type': 'date.day', 's': 9, 'e': 11, 'data': '02'}], 'e': 11, 'data': '2021-03-02'}], 'e': 11, 'data': '2021-03-02'}}
+'1000E132
+'1001E532
+'1010E632
+'1011E732
+'1100E232
+'1101E132
+'1110E032
+'1111E532
+'2000E432

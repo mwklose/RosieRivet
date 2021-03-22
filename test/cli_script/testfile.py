@@ -54,7 +54,7 @@ class FlowMethodTest(unittest.TestCase):
     def test_RivetCLI(self):
         for i in range(NUM_FILES):
             filename = "test" + str(i + 1) + ".csv"
-            RivetCLI.main(filename, False)
+            RivetCLI.main(filename, True)
 
 if __name__ == "__main__":
     unittest.main()

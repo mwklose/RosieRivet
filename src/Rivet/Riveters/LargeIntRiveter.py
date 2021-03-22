@@ -20,7 +20,7 @@ class LargeIntRiveter(Riveter.Riveter):
         # Rosie recognize scientific notation or IDs
         self.engines = {
             "sci_notation" : engine.compile("{[:digit:]* [E] [:digit:]*}"),
-            "leading_zero" : engine.compile("{[0]* [:alnum:]*}"),
+            "leading_zero" : engine.compile("{[0]{1,} [:alnum:]*}"),
             "long_integer" : engine.compile("{[:digit:]{12,}}")
         }
 
@@ -35,9 +35,14 @@ class LargeIntRiveter(Riveter.Riveter):
             total_counter = [0] * n
 
             # Keep row and column counter
-            rn = 0
-            cn = 0
             for e in self.engines:
+                rn = 0
+                cn = 0
+                # Get to the front of the file
+                f.seek(0)
+                # Throw away header lines
+                next(csvReader)
+                # Then, iterate through all values in csvReader to analyze.
                 for row in csvReader:
                     for col in row:
                         # Keep count of elements if they exist
@@ -67,7 +72,7 @@ class LargeIntRiveter(Riveter.Riveter):
                     cn = 0
 
         # Add Confidence and number of hits per column
-        
+        total_counter = [r / len(self.engines) for r in total_counter] # Number of total hits is triple counted, this resets the triple counting
         self.large_int_analysis["confidence"] = [d / t for d,t in zip(error_counter, total_counter)]
         self.large_int_analysis["hits"] = [a for a in error_counter]
         return self.large_int_analysis
