@@ -81,7 +81,7 @@ var ddup = {
 
     // (C4) AJAX REQUEST
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "dd-upload.php");
+    xhr.open("POST", "rosie.php");
     xhr.onload = function () {
       // OPTIONAL - SHOW UPLOAD STATUS
       ddup.hstat.innerHTML += `<div>${thisfile.name} - ${this.response}</div>`;
