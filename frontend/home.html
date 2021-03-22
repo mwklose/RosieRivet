@@ -14,50 +14,46 @@
       <a href="excel.html">Excel Plugin</a>
       <a href="cli.html">CLI Tool</a>
     </div>
-<div class = "content">
-    <div id="upzone"> Drop Files Here </div>
+  <div class = "content" style="text-align:center;">
+    <p> Placeholder for the Rosie image </p>
 
-    <!-- (C) UPLOAD STATUS -->
-    <div id="upstat"></div>
+    <h1> Rosie Pattern Language Rivet </h1>
 
-  <!-- (D) FALLBACK -->
-    <form id="upform" action="rosie.php" method="post" enctype="multipart/form-data">
-      <input type="file" name="upfile" accept="image/*" required>
-      <input type="submit" value="Upload File">
+    <h3> Process and protect your files from being misread! </h3>
+
+    <form id="upload" action="index.html" method="POST" enctype="multipart/form-data">
+      <fieldset>
+      <legend>HTML File Upload</legend>
+
+      <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
+
+      <div>
+      	<label for="fileselect">Choose files to upload:</label>
+      	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+      	<div id="filedrag">or drop files here</div>
+      </div>
+
+      <div id="submitbutton">
+      	<button type="submit">Upload Files</button>
+      </div>
+
+      </fieldset>
+
     </form>
-</div>
-<form id="upload" action="index.html" method="POST" enctype="multipart/form-data">
 
-<fieldset>
-<legend>HTML File Upload</legend>
+    <div id="messages">
+    <p>Status Messages</p>
+    </div>
 
-<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
+    <button class="button">Process</button>
 
-<div>
-	<label for="fileselect">Files to upload:</label>
-	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
-	<div id="filedrag">or drop files here</div>
-</div>
+    <h2>Disclaimer</h2>
+    <p>The code was developed by <a href="http://twitter.com/craigbuckler">Craig Buckler</a> of <a href="http://optimalworks.net/">OptimalWorks.net</a> for <a href="http://sitepoint.com/">SitePoint.com</a>.</p>
 
-<div id="submitbutton">
-	<button type="submit">Upload Files</button>
-</div>
+    <p>This code can be <a href="http://blogs.sitepointstatic.com/examples/tech/filedrag/1/filedrag1.zip">downloaded and used</a> without any restrictions but please don't expect support! A link back to SitePoint.com is appreciated.</p>
 
-</fieldset>
-
-</form>
-
-<div id="messages">
-<p>Status Messages</p>
-</div>
-
-
-<h2>Disclaimer</h2>
-<p>The code was developed by <a href="http://twitter.com/craigbuckler">Craig Buckler</a> of <a href="http://optimalworks.net/">OptimalWorks.net</a> for <a href="http://sitepoint.com/">SitePoint.com</a>.</p>
-
-<p>This code can be <a href="http://blogs.sitepointstatic.com/examples/tech/filedrag/1/filedrag1.zip">downloaded and used</a> without any restrictions but please don't expect support! A link back to SitePoint.com is appreciated.</p>
-
-<script src="filedrag.js"></script>
+    <script src="filedrag.js"></script>
+  </div>
     <div class="bottombar">
       <a>Copyright Thing</a>
       <a href="linky">Privacy & Terms</a>
