@@ -1,10 +1,10 @@
 testnumber,Gene Name
-test1,'APR1
-test1,works
-test1,'MARCH2
-test1,'APR1
-test1,works
-test1,'MARCH2
-test1,'APR1
-test1,works
-test1,'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2

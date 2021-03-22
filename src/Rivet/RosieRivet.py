@@ -42,9 +42,11 @@ class RosieRivet():
     
     def RivetReadCSV(self):
         out = []
-        f = open(self.csv)
-        delimiter = csv.Sniffer().sniff(f.read(1024), delimiters=",;\t")
-        f.close()
+        with open(self.csv) as f:
+            try:
+                delimiter = csv.Sniffer().sniff(f.read(1024))
+            except:
+                delimiter = ","
 
         with open(self.csv) as f:
             for row in csv.reader(f, delimiter):

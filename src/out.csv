@@ -1,10 +1,10 @@
-date,testnumber,Gene Name
-2021-03-10,test1,'APR1
-2021-02-10,test1,works
-2020-04-10,test1,'MARCH2
-2021-01-05,test1,'APR1
-2021-03-10,test1,works
-2021-03-14,test1,'MARCH2
-2021-03-07,test1,'APR1
-2021-03-03,test1,works
-2021-03-02,test1,'MARCH2
+testnumber,Gene Name
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
