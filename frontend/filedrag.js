@@ -40,12 +40,16 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			ParseFile(f);
 		}
 
+		sessionStorage.setItem("files", JSON.stringify(files));
+
+
+
+
 	}
 
 
 	// output file information
 	function ParseFile(file) {
-
 		Output(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
