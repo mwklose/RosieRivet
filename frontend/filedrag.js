@@ -57,6 +57,24 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			"</strong> bytes</p>"
 		);
 
+		var fd = new FormData();
+		fd.append('file', file);
+		var req = jQuery.ajax({
+			url: 'http://0.0.0.0:5000/v1/analyze',
+			method: 'POST',
+			data: fd,
+			processData: false,
+ 			contentType: false
+		});
+		req.then(function(response) {
+		  console.log(response)
+		}, function(xhr) {
+		  console.error('failed to fetch xhr', xhr)
+		})
+
+
+
+
 	}
 
 
