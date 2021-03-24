@@ -9,6 +9,8 @@ import zipfile
 from flask import send_file
 import csv,json
 import pprint
+from flask_cors import CORS
+
 
 
 
@@ -17,6 +19,8 @@ app.config["DEBUG"] = True
 import sys
 # Determine current path of file
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+
+CORS(app)
 
 # Allow for import of RosieRivet
 sys.path.append(os.path.abspath(os.path.join('..','..')))
@@ -114,4 +118,4 @@ def process():
 
 
  
-app.run()
+app.run(host='0.0.0.0', port=5000)

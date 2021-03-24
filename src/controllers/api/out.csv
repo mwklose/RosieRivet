@@ -1,0 +1,10 @@
+testnumber,Gene Name
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'APR1
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",works
+"=HYPERLINK(“http://www.google.com “, “Click for Report”)",'MARCH2
