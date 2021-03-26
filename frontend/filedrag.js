@@ -3,7 +3,9 @@ filedrag.js - HTML5 File Drag & Drop demonstration
 Featured on SitePoint.com
 Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 */
+
 (function() {
+	DEBUG_URL = "http://0.0.0.0:5000/v1/analyze";
 
 	// getElementById
 	function $id(id) {
@@ -40,11 +42,6 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			ParseFile(f);
 		}
 
-		sessionStorage.setItem("files", JSON.stringify(files));
-
-
-
-
 	}
 
 
@@ -57,17 +54,19 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			"</strong> bytes</p>"
 		);
 
+
 		var fd = new FormData();
 		fd.append('file', file);
+		fd.append('sess_key', 23);
 		var req = jQuery.ajax({
-			url: 'http://0.0.0.0:5000/v1/analyze',
+			url: DEBUG_URL,
 			method: 'POST',
 			data: fd,
 			processData: false,
  			contentType: false
 		});
 		req.then(function(response) {
-		  console.log(response)
+			sessionStorage.setItem(file.name + "_analysis", response);
 		}, function(xhr) {
 		  console.error('failed to fetch xhr', xhr)
 		})

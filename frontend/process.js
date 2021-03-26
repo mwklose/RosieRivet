@@ -1,8 +1,7 @@
 (function() {
-  var files = JSON.parse(sessionStorage.getItem("files"));
-  console.log(files);
-  for(var i = 0, f; f = files[i]; i++){
-    console.log(f.name);
+  for(i = 0; i < sessionStorage.length; i++){
+    if(sessionStorage.key(i).endsWith("_analysis")){
+      console.log(sessionStorage.getItem(sessionStorage.key(i)))
+    }
   }
-
 })();
