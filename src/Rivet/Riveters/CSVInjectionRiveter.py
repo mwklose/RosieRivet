@@ -16,7 +16,7 @@ class CSVInjectionRiveter(Riveter.Riveter):
         rosie.load(librosiedir, quiet = True)
         engine = rosie.engine()
         # TODO: ENGINE DOES NOT MATCH ANYTHING YET
-        self.csv_injections = engine.compile("{[=]}")
+        self.csv_injections = engine.compile("{^[=@+\-] .*}")
 
     def analyze(self, csvFile):
         delimiter = self.sniffDelimiter(csvFile)
@@ -35,7 +35,6 @@ class CSVInjectionRiveter(Riveter.Riveter):
                     # Keep count of elements if they exist
                     total_counter[cn] += 1
                     em = self.csv_injections.fullmatch(col.upper())
-                    print(col, em)
                     # Get count of total number of matched dates based on Rosie built-in
                     if(em):
                         error_counter[cn] += 1
@@ -64,7 +63,14 @@ class CSVInjectionRiveter(Riveter.Riveter):
         return self.csv_injections_analysis
 
     def apply(self, csvFile, options, confidence):
-        pass
+        stats = self.csv_injections_analysis["confidence"]
+        detections = options[self.scream()]["detected"]
+        for k in detections.keys():
+            row = k[0]
+            col = k[1] - 1
+            if stats[col] > confidence:
+                csvFile[row][col] = '\'{:s}'.format(csvFile[row][col])
+        return
 
     def scream(self):
         return "CSVInjectionRiveter"
