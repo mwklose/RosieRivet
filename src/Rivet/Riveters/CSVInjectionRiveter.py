@@ -15,7 +15,6 @@ class CSVInjectionRiveter(Riveter.Riveter):
         librosiedir = './lib'
         rosie.load(librosiedir, quiet = True)
         engine = rosie.engine()
-        # TODO: ENGINE DOES NOT MATCH ANYTHING YET
         self.csv_injections = engine.compile("{^[=@+\-] .*}")
 
     def analyze(self, csvFile):
