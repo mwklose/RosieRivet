@@ -33,7 +33,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 		//Set or Get session key for current user
 		if(sessionStorage.getItem("sess_key") === null){
-			sessionStorage.setItem("sess_key") = Math.random() * 1000;
+			sessionStorage.setItem("sess_key",Math.random() * 1000);
 		}
 
 		// cancel event and hover styling
