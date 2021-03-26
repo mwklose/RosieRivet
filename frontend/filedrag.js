@@ -5,7 +5,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 */
 
 (function() {
-	DEBUG_URL = "http://0.0.0.0:5000/v1/analyze";
+	DEBUG_URL = "http://127.0.0.1:5000/v1/analyze";
 
 	// getElementById
 	function $id(id) {
@@ -30,6 +30,11 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// file selection
 	function FileSelectHandler(e) {
+
+		//Set or Get session key for current user
+		if(sessionStorage.getItem("sess_key") === null){
+			sessionStorage.setItem("sess_key") = Math.random() * 1000;
+		}
 
 		// cancel event and hover styling
 		FileDragHover(e);
@@ -57,7 +62,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 		var fd = new FormData();
 		fd.append('file', file);
-		fd.append('sess_key', 23);
+		fd.append('sess_key', sessionStorage.getItem("sess_key"));
 		var req = jQuery.ajax({
 			url: DEBUG_URL,
 			method: 'POST',
@@ -66,7 +71,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
  			contentType: false
 		});
 		req.then(function(response) {
-			sessionStorage.setItem(file.name + "_analysis", response);
+			sessionStorage.setItem(file.name + "_analysis", JSON.stringify(response));
 		}, function(xhr) {
 		  console.error('failed to fetch xhr', xhr)
 		})
