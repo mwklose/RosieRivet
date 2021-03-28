@@ -29,7 +29,15 @@ class RosieRivet():
     def RivetFileAnalyzer(self):
         analysis = {}
         for r in self.riveters:
-            analysis[r.scream()] = r.analyze(self.csv) 
+            # Get the analysis overall
+            analysis[r.scream()] = r.analyze(self.csv)
+
+            # TODO: Remove potentially and sort in APIRivet
+            # Then, sort detections so they appear in column order, then by row
+            # items = analysis[r.scream()]['detected'].items()
+            # temp_sort = sorted(items, key = lambda x: x[0])
+            # analysis[r.scream()]['detected'] = dict(sorted(temp_sort, key = lambda x:x[1]))
+        
         return analysis
 
     #After file is approved will then be processed in some way \o/ \o/ \o/

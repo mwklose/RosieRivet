@@ -55,6 +55,7 @@ def analyze():
 
 	#Convert Tuple to string (JSON cannot serialize tuples)
 	for riveter,anl in analysis.items():
+		# SORT KEY VALUES HERE
 		analysis[riveter]["detected"] = dict((':'.join(str(keys) for keys in k), v) for k,v in analysis[riveter]["detected"].items())
 
 	#store RosieRivet object and file under session key
