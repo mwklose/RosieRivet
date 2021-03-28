@@ -6,7 +6,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 (function() {
 	DEBUG_URL = "http://127.0.0.1:5000/v1/analyze";
-
+	sessionStorage.clear()
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
