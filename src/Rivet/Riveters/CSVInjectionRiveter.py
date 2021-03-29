@@ -62,6 +62,8 @@ class CSVInjectionRiveter(Riveter.Riveter):
         return self.csv_injections_analysis
 
     def apply(self, csvFile, options, confidence):
+        if(self.scream() not in options):
+            return
         stats = self.csv_injections_analysis["confidence"]
         detections = options[self.scream()]["detected"]
         for k in detections.keys():

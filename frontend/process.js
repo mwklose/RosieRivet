@@ -1,4 +1,6 @@
 var analysis = [];
+DEBUG_URL = "http://127.0.0.1:5000";
+var editAnalysis = new Set();
 (function() {
   for(i = 0; i < sessionStorage.length; i++){
     if(sessionStorage.key(i).endsWith("_analysis")){
@@ -6,49 +8,58 @@ var analysis = [];
     }
   }
 })();
+
 // c stands for class
 function change(c){
 	if($(c).is(":checked")){
 		for (let x of document.querySelectorAll('.'+c.id)) x.style = "";
+      editAnalysis.delete(c.id)
 	}else{
 		for (let x of document.querySelectorAll('.'+c.id)) x.style = "display:none;";
+      editAnalysis.add(c.id)
 	}
 }
 
 
+
+
+
 function makeDropDown(name, columns){
+  //create a div class to surround lists
 	list_div = document.createElement('div');
+  //assign id
 	list_div.setAttribute("id", name + "_" + "list");
+  //use bootstrap dropdown css
 	list_div.setAttribute("class", "dropdown btn-group");
 	list_div.setAttribute("tabindex", "100");
+  //add list div to html
 	document.getElementById("dropdown").appendChild(list_div);
 
+  //add an anchor
 	anchor = document.createElement('a');
+  //represent the button to click and get dropdown
 	anchor.setAttribute("class", "btn dropdown-toggle");
 	anchor.setAttribute("data-toggle", "dropdown");
-	anchor.onclick = function(evt) {
-  	if (checkList.classList.contains('visible')){
-    	checkList.classList.remove('visible');
-  	}
-  	else
-    	checkList.classList.add('visible');
-	}
-  	anchor.appendChild(document.createTextNode(name));
-  	list_div.appendChild(anchor);
 
-  	items_list = document.createElement('ul');
-  	items_list.setAttribute("class", "dropdown-menu")
-  	list_div.appendChild(items_list)
-  	for (var i = 0; i < columns.length; i++){
-  		list_item = document.createElement('li');
-  		input = document.createElement("input");
-  		input.setAttribute("type","checkbox");
-  		list_item.appendChild(input);
-  		list_item.appendChild(document.createTextNode(columns[i]));
-  		input.setAttribute("onchange", "change(this)");
-  		input.id =  name + "_" + columns[i];
-  		input.checked = true;
-  		items_list.appendChild(list_item)
+  //add name of riveter to button
+  anchor.appendChild(document.createTextNode(name));
+  list_div.appendChild(anchor);
+
+  //add columns of riveter to list
+  items_list = document.createElement('ul');
+  items_list.setAttribute("class", "dropdown-menu")
+  list_div.appendChild(items_list)
+  for (var i = 0; i < columns.length; i++){
+  	list_item = document.createElement('li');
+  	input = document.createElement("input");
+  	input.setAttribute("type","checkbox");
+  	list_item.appendChild(input);
+  	list_item.appendChild(document.createTextNode(columns[i]));
+    //append change function to element
+  	input.setAttribute("onchange", "change(this)");
+  	input.id =  name + "_" + columns[i];
+  	input.checked = true;
+  	items_list.appendChild(list_item)
   	}
 }
 
@@ -150,6 +161,7 @@ function sortColumns(jsondata){
   return jsondata;
 }
 
+//generate drop downs for all riveters
 function generateDropDowns(){
 	for (var i = 0; i < analysis.length; i++) {
 		for (key in analysis[i]) {
@@ -161,6 +173,65 @@ function generateDropDowns(){
 			makeDropDown(key, Array.from(column_numbers).sort());
 		}
 	}
+
+}
+
+//send and create protected files
+function send(){
+  for(var i = 0; i < analysis.length; i++){
+
+      analysis_payload = {}
+      for(key in analysis[i]){
+        analysis_payload[key] = {}
+
+        for(i_key in analysis[i][key]){
+          if(i_key === "detected"){
+            analysis_payload[key][i_key] = {}
+            for(j_key in analysis[i][key]["detected"]){
+              column_key = j_key.split(":");
+              if(editAnalysis.has(key+"_"+column_key[1])){
+                continue
+              }
+              else{
+                analysis_payload[key][i_key][j_key] =  analysis[i][key]["detected"][j_key]
+              }
+
+            }
+          } else{
+            analysis_payload[key][i_key] =analysis[i][key][i_key]
+          }
+        }
+      }
+      var fd = new FormData();
+      for(i = 0; i < sessionStorage.length; i++){
+        if(sessionStorage.key(i).endsWith("csv")){
+          fd.append('file', sessionStorage.getItem(sessionStorage.key(i)));
+          break;
+        }
+      } 
+      fd.append('sess_key', sessionStorage.getItem("sess_key"));
+      fd.append('analysis', JSON.stringify(analysis_payload))
+      var req = jQuery.ajax({
+        url: DEBUG_URL+"/v1/process",
+        method: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false
+      });
+      req.then(function(response) {
+        const blob = new Blob([response], {type: 'application/pdf'});
+        const downloadUrl = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = downloadUrl;
+        a.download = "out.csv";
+        document.body.appendChild(a);
+        a.click();
+      }, function(xhr) {
+        console.error('failed to fetch xhr', xhr)
+      })
+
+  }
+
 
 
 }

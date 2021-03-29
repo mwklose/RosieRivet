@@ -3,21 +3,27 @@
   <head>
     <meta charset="utf-8">
     <title>RPL Rivet</title>
-    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <div class="content">
-      Here is where we should put the progress bar (how to do?)
+      Here is where we should put the progress bar 
       <p>
         Please select which Riveters you wish to use on this file.
       </p>
       <div id="dropdown"></div>
       <div id="datalist"></div>
+      <div id="submitbutton">
+        <button type="submit" onClick="send()">Protect Files</button>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js"></script>
+
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
       <script type='text/javascript'
         src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
       <link rel="stylesheet" type="text/css"
         href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+      <link rel="stylesheet" href="style.css">
+
       <script src="process.js"></script>
 
     </div>

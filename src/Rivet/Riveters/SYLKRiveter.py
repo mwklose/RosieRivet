@@ -35,6 +35,8 @@ class SYLKRiveter(Riveter.Riveter):
         return self.sylk_analysis
 
     def apply(self, csvFileAsListOfLists, options, confidence):
+        if(self.scream() not in options):
+            return
         detections = options[self.scream()]["detected"]
         for k in detections.keys():
             row, col = 0, 0

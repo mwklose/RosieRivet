@@ -110,6 +110,8 @@ class DateFormatRiveter(Riveter.Riveter):
         return self.date_format_analysis
 
     def apply(self, csvFile, options, confidence):
+        if(self.scream() not in options):
+            return
         stats = self.date_format_analysis["confidence"]
         detections = options[self.scream()]["detected"]
         for k in detections.keys():

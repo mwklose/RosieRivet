@@ -78,6 +78,8 @@ class LargeIntRiveter(Riveter.Riveter):
         return self.large_int_analysis
 
     def apply(self, csvFile, options, confidence):
+        if(self.scream() not in options):
+            return
         stats = self.large_int_analysis["confidence"]
         detections = options[self.scream()]["detected"]
         for k in detections.keys():

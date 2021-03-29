@@ -1,4 +1,5 @@
 import flask
+from flask import send_from_directory
 from flask import request
 from flask import make_response
 from flask import jsonify
@@ -91,7 +92,6 @@ def process():
 	#retrieve RosieRivet object and file associated with session key
 	rr,file = sess_cache.get(cookie_key)
 
-	# #save file
 	# file.save(os.path.join(ROOT_PATH,file.filename))
 
 	#retrieve analysis(options) back from frontend which should be edited by the user to their preference
@@ -112,15 +112,16 @@ def process():
 		pprint.PrettyPrinter(indent=4, stream=tf).pprint(rivetTXT)
 
 
-	zipf = zipfile.ZipFile('modified.zip','w', zipfile.ZIP_DEFLATED)
-	zipf.write("out.csv")
-	zipf.write("out.txt")
-	zipf.close()
+	# zipf = zipfile.ZipFile('modified.zip','w', zipfile.ZIP_DEFLATED)
+	# zipf.write("out.csv")
+	# zipf.write("out.txt")
+	# zipf.close()
 
-	#remove files created
-	os.remove((os.path.join(ROOT_PATH,file.filename)))
+	# #remove files created
+	# os.remove((os.path.join(ROOT_PATH,file.filename)))
+	response = send_from_directory(directory='', filename='out.csv')
 
-	return send_file('modified.zip',mimetype = 'zip',attachment_filename= 'modified.zip',as_attachment = True)
+	return response
 
 
  

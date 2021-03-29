@@ -85,6 +85,8 @@ class GeneDateRiveter(Riveter.Riveter):
     
     #Processes file and outputs new file aimed to protect csv file against misinterpretation
     def apply(self, csvFile, options, confidence):
+        if(self.scream() not in options):
+            return
         stats = self.gene_date_analysis["confidence"]
         # Get all detections
         detections = options[self.scream()]["detected"]
