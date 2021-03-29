@@ -157,10 +157,6 @@ function makeTable(){
   }
 }
 
-function sortColumns(jsondata){
-  return jsondata;
-}
-
 //generate drop downs for all riveters
 function generateDropDowns(){
 	for (var i = 0; i < analysis.length; i++) {
@@ -203,11 +199,15 @@ function send(){
         }
       }
       var fd = new FormData();
+      var filename = "";
       for(i = 0; i < sessionStorage.length; i++){
         if(sessionStorage.key(i).endsWith("csv")){
           fd.append('file', sessionStorage.getItem(sessionStorage.key(i)));
+          var myfile = sessionStorage.key(i);
+          filename = myfile.substring(0, myfile.length - 4);
           break;
         }
+        
       } 
       fd.append('sess_key', sessionStorage.getItem("sess_key"));
       fd.append('analysis', JSON.stringify(analysis_payload))
@@ -223,7 +223,7 @@ function send(){
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = downloadUrl;
-        a.download = "out.csv";
+        a.download = filename + "_riveted.csv";
         document.body.appendChild(a);
         a.click();
       }, function(xhr) {
@@ -231,9 +231,6 @@ function send(){
       })
 
   }
-
-
-
 }
 generateDropDowns();
 makeTable();

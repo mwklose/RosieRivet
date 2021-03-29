@@ -30,7 +30,7 @@ class LRUCache(object):
         
     def evict(self):
         last_node = self.SentinelNode.prev
-        del self.lookup[last_node.key]
+        del self.lookup[last_node.sess_key]
         self.size -= 1
         self.SentinelNode.prev = self.SentinelNode.prev.prev
         self.SentinelNode.prev.next = self.SentinelNode
