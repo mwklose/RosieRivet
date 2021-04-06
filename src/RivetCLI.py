@@ -157,7 +157,7 @@ def writeFile(CSV, TXT):
 if __name__ == "__main__":
     
     # Match all files given in
-    files = [a for a in sys.argv if ".csv" in a]
+    files = [a for a in sys.argv if ".csv" in a or ".txt" in a]
     # Match silent mode
     silentMode = "-s" in sys.argv
     for f in files:

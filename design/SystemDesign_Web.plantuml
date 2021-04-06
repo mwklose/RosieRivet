@@ -11,20 +11,8 @@ actor/ EndWebUser
 
 'Three interfaces to run
 cloud Server {
-    card AnalyzeFile [
-        <b> AnalyzeFile </b>
-        Input: CSV file
-        Process: Defers to <i>RivetFileAnalyzer</i>
-        Output: JSON with <i>RivetFileAnalyzer</i> output
-    ]
-    card ProcessFile [
-        <b> ProcessFile </b>
-        Input: CSV file, JSON options (analyses, confidence level)
-        Process: Defers to <i>RivetProcessor</i>
-        Output: ZIP containing:
-                CSV (modified) with <i>RivetProcessor</i> output
-                TXT with Rivet Analysis
-    ]
+    card AnalyzeFile
+    card ProcessFile
 }
 
 database MongoDB [
@@ -34,37 +22,31 @@ database MongoDB [
     ]
 
 component RosieRivet #FAC800 {
-        card RivetFileAnalyzer [
-            <b>RivetFileAnalyzer</b>
-            Input: CSV file
-            Process: Defers to <i>Riveters</i>
-            Output: CSV Size, Separator Used, 
-                    Column Types, CSV Injections Found
-        ]
-        card RivetProcessor [
-            <b>RivetProcessor</b>
-            Input: CSV file
-            Process: Defers to <i>Riveters</i>
-            Output: Processed CSV File, 
-                    Analysis Summary
-        ]
+        card RivetFileAnalyzer
+        card RivetProcessor 
         'within riveters, have Apply AND Analyze functions
         component Riveters {
-            card Riveter [
-                <b>Riveter</b>
-                ..
-                <i>analyze</i>(Pandas Column)
-                <i>apply</i>(Pandas Column)
-            ]
+            card Riveter
+
+            card MetaRiveter
+            card MesaRiveter 
+
+            Riveter -- MetaRiveter 
+            Riveter -- MesaRiveter
+
             card GeneDateRiveter
             card LargeIntRiveter
             card CSVInjectionRiveter
             card DateFormatRiveter
+            card LocaleSeparatorRiveter
+            card SYLKRiveter
 
-            Riveter -- GeneDateRiveter
-            Riveter -- LargeIntRiveter
-            Riveter -- CSVInjectionRiveter
-            Riveter -- DateFormatRiveter
+            MesaRiveter -- GeneDateRiveter
+            MesaRiveter -- LargeIntRiveter
+            MesaRiveter -- CSVInjectionRiveter
+            MesaRiveter -- DateFormatRiveter
+            MetaRiveter -- LocaleSeparatorRiveter
+            MetaRiveter -- SYLKRiveter
         }
         RivetFileAnalyzer .. Riveter : utilizes
         RivetProcessor .. Riveter : utilizes

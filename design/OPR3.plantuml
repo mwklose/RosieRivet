@@ -1,0 +1,53 @@
+@startuml OPR3 Flows
+actor WebUser
+' Excel files and artifacts
+    file WebCSV
+
+    artifact HomePage
+    artifact AnalyzePage
+
+'Three interfaces to run
+cloud Server {
+    card AnalyzeFile
+}
+
+database MongoDB [
+        <b>MongoDB</b>
+        CSV Size,
+        User Country
+    ]
+
+component RosieRivet #FAC800 {
+        card RivetFileAnalyzer
+        'within riveters, have Apply AND Analyze functions
+        component Riveters {
+            card Riveter
+
+            card MetaRiveter
+            card MesaRiveter 
+
+            Riveter -- MetaRiveter 
+            Riveter -- MesaRiveter
+
+            card LocaleSeparatorRiveter
+            card SYLKRiveter 
+
+            MetaRiveter -- LocaleSeparatorRiveter
+            MetaRiveter -- SYLKRiveter
+        }
+        RivetFileAnalyzer .. Riveter : utilizes
+        
+    }
+
+    ' WEB INTERFACE FLOW
+    MongoDB --[hidden] RivetFileAnalyzer
+    AnalyzeFile .> MongoDB : Sends data to store
+
+    WebUser == WebCSV
+    WebCSV ==> HomePage
+    HomePage ==> AnalyzeFile
+    AnalyzeFile => RivetFileAnalyzer : Return File Analysis
+    RivetFileAnalyzer => AnalyzeFile 
+    AnalyzeFile ==> AnalyzePage
+
+@enduml

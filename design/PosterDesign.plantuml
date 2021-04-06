@@ -1,0 +1,24 @@
+@startuml
+skinparam Linetype ortho
+    actor "USER" as u
+    usecase "User Approves File" as uaf
+    usecase "User Downloads File" as udf
+    actor/ "USER" as us
+    u ..> uaf : User gives file,\nsees analysis
+    uaf ..> udf : User reads analysis,\napproves or denies\nrecognized errors
+    udf ..> us : Satisfied user\n downloads file
+
+
+package  RosieRivet {
+    usecase "Analyze File: \nboth Metariveters\nand Mesariveters" as af
+    usecase "Process File: \nMesariveters\napply changes" as pf
+
+    af -[hidden]- pf
+}
+
+af <- u
+af -> uaf
+pf <- uaf
+pf -> udf
+
+@enduml

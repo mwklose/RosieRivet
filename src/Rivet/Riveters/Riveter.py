@@ -1,10 +1,11 @@
 import csv
 #Parent class for all riveter types
-sessionRiveters = []
+metaRiveters = []
+mesaRiveters = []
 # @author MWK
 
 def getRiveters():
-    return sessionRiveters
+    return metaRiveters
 
 class Riveter:
     # Define a constructor in each Riveter. 
@@ -34,10 +35,27 @@ class Riveter:
         return sniff
 
     # Define method to register for system. 
+    @classmethod
+    def register(cls):
+        pass
+
+# Create a subset of Riveters focused solely on analyzing the data, hence, "meta"
+class MetaRiveter(Riveter):
+    @classmethod
+    def __init__(cls):
+        return
+
     def register(self):
-        sessionRiveters.append(self)
+        metaRiveters.append(self)
 
+# Create a subset of Riveters focused on diving into the data and providing fixes, hence, "mesa"
+class MesaRiveter(Riveter):
+    @classmethod
+    def __init__(cls):
+        return
 
+    def register(self):
+        mesaRiveters.append(self)   
     # Jennings suggestions:
     # Make a min-max riveter (analysis only), shows extensibility
     # Make design that offers to not fix anything

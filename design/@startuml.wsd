@@ -1,0 +1,23 @@
+@startuml
+class RosieRivet {
+    + analyzeFile() : something
+    + processFile() : something
+}
+
+class Riveter {
+
+}
+
+class Metariveter extends Riveter {
+
+}
+
+class SYLKRiveter implements Metariveter
+class Mesariveter extends Riveter {
+
+}
+
+class GeneDateRiveter implements Mesariveter
+class DateFormatRiveter implements Mesariveter
+@enduml
+L

@@ -43,15 +43,26 @@
         'within riveters, have Apply AND Analyze functions
         component Riveters {
             card Riveter
+
+            card MetaRiveter
+            card MesaRiveter 
+
+            Riveter -- MetaRiveter 
+            Riveter -- MesaRiveter
+
             card GeneDateRiveter
             card LargeIntRiveter
             card CSVInjectionRiveter
             card DateFormatRiveter
+            card LocaleSeparatorRiveter
+            card SYLKRiveter
 
-            Riveter -- GeneDateRiveter
-            Riveter -- LargeIntRiveter
-            Riveter -- CSVInjectionRiveter
-            Riveter -- DateFormatRiveter
+            MesaRiveter -- GeneDateRiveter
+            MesaRiveter -- LargeIntRiveter
+            MesaRiveter -- CSVInjectionRiveter
+            MesaRiveter -- DateFormatRiveter
+            MetaRiveter -- LocaleSeparatorRiveter
+            MetaRiveter -- SYLKRiveter
         }
         RivetFileAnalyzer .. Riveter : utilizes
         RivetProcessor .. Riveter : utilizes

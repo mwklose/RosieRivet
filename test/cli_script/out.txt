@@ -1,6 +1,50 @@
-{   'CSVInjectionRiveter': {   'confidence': [0.0, 0.0],
-                               'detected': {},
-                               'hits': [0, 0]},
+{   'CSVInjectionRiveter': {   'confidence': [1.0, 0.0],
+                               'detected': {   (1, 1, 'TESTNUMBER'): '=HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (2, 1, 'TESTNUMBER'): '@HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (3, 1, 'TESTNUMBER'): '+HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (4, 1, 'TESTNUMBER'): '-HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (5, 1, 'TESTNUMBER'): '=HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (6, 1, 'TESTNUMBER'): '@HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (7, 1, 'TESTNUMBER'): '+HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (8, 1, 'TESTNUMBER'): '-HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)',
+                                               (9, 1, 'TESTNUMBER'): '=HYPERLINK(“http://www.google.com '
+                                                                     '“, '
+                                                                     '“Click '
+                                                                     'for '
+                                                                     'Report”)'},
+                               'hits': [9, 0]},
     'DateFormatRiveter': {   'confidence': [0.0, 0.0],
                              'detected': {},
                              'hits': [0, 0],
@@ -17,4 +61,5 @@
     'LargeIntRiveter': {   'confidence': [0.0, 0.0],
                            'detected': {},
                            'hits': [0, 0]},
-    'LocaleSeparatorRiveter': {'confidence': {}, 'detected': {}, 'hits': {}}}
+    'LocaleSeparatorRiveter': {'confidence': {}, 'detected': {}, 'hits': {}},
+    'SYLKRiveter': {'confidence': [1, 1], 'detected': {}, 'hits': [0]}}
