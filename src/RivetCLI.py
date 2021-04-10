@@ -21,10 +21,10 @@ def main(file, silentMode):
     rr = RosieRivet.RosieRivet(file) # call constructor of RosieRivet
 
     # Analyze File
-    mesaAnalysis, metaAnalysis = analyzeFile(rr)
+    dataAnalysis, metaAnalysis = analyzeFile(rr)
     
     # Approve File
-    options = approveFile(rr, mesaAnalysis, metaAnalysis, silentMode)
+    options = approveFile(rr, dataAnalysis, metaAnalysis, silentMode)
 
     # Process File
     rivetCSV, rivetTXT = processFile(rr, options)
@@ -42,14 +42,14 @@ def analyzeFile(rr):
 #starts interaction between user and system to approve the potential changes to files
    #will eventually display each column that could be misread and gets user to approve or deny
     #that this column needs to be protected.
-def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
+def approveFile(rr, data_analysis, meta_analysis, silentMode):
     if silentMode:
-        return mesa_analysis
+        return dataAnalysis
     
     # Flow of procedure: 
     # MetaRiveter analysis (static)
-    # MesaRiveter analysis (dynamic)
-    # Return adjusted MesaRiveter analhsis
+    # DataRiveter analysis (dynamic)
+    # Return adjusted DataRiveter analhsis
 
     print("\n----METARIVETER ANALYSIS----")
     for r in rr.meta_riveters:
@@ -83,13 +83,13 @@ def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
                     printhits[k][:5]) # Print up to 5 examples
         print()
 
-    # MesaRiveter Analysis (dynamic)
+    # DataRiveter Analysis (dynamic)
 
-    print("\n----MESARIVETER ANALYSIS----")
+    print("\n----DATARIVETER ANALYSIS----")
     rivetsToRemove = []
-    for r in rr.mesa_riveters:
+    for r in rr.data_riveters:
         # See if riveting even possible
-        if sum(mesa_analysis[r.scream()]['hits']) == 0:
+        if sum(data_analysis[r.scream()]['hits']) == 0:
             print("No rivets for", bcolors.OKBLUE, r.scream(), bcolors.ENDC)
             rivetsToRemove.append(r)
             continue
@@ -101,14 +101,14 @@ def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
         while rc.upper() != "DONE":
             printhits = {}
             colnames = {}
-            for ov in mesa_analysis[r.scream()]['detected'].keys():
+            for ov in data_analysis[r.scream()]['detected'].keys():
                 try:
                     # Key: Column name --> Value: Add example to list
-                    printhits[ov[1]].append("%10s" % mesa_analysis[r.scream()]['detected'][ov])
+                    printhits[ov[1]].append("%10s" % data_analysis[r.scream()]['detected'][ov])
                 except KeyError:
                     # If key error, list does not exist yet, so create list with first element. 
                     # Key: Column name --> Value: Formatted List for values detected
-                    printhits[ov[1]] = ["%10s" % mesa_analysis[r.scream()]['detected'][ov]]
+                    printhits[ov[1]] = ["%10s" % data_analysis[r.scream()]['detected'][ov]]
                     # Keep track of column names for happy printing :)))))
                     colnames[ov[1]] = ov[2]
 
@@ -117,7 +117,7 @@ def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
             for k in sorted(printhits.keys()):
                 print(bcolors.BOLD, # Bold face
                         "%10s" % colnames[k],  # Column name
-                        "(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, mesa_analysis[r.scream()]['confidence'][k - 1], mesa_analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
+                        "(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, data_analysis[r.scream()]['confidence'][k - 1], data_analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
                         bcolors.ENDC, # End bold face
                         "-->", # Arrow for pretty shapes
                         printhits[k][:5]) # Print up to 5 examples
@@ -151,27 +151,27 @@ def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
             
             # Remove values from ANALYSIS
             # Get copy of list to remove values from; throws RunTimeError otherwise due to shallow copy of list
-            remove = list(mesa_analysis[r.scream()]['detected'].keys()).copy()
+            remove = list(data_analysis[r.scream()]['detected'].keys()).copy()
             # If not all columns, then only remove values needed.
             if col != "*":
                 remove = [k for k in remove if k[1] == col]
 
             # Iterate through all matches and remove them.
             for i in remove:
-                mesa_analysis[r.scream()]['detected'].pop(i)
+                data_analysis[r.scream()]['detected'].pop(i)
             
             # Check if all values have been removed - this is okay. 
-            if len(mesa_analysis[r.scream()]['detected']) == 0:
+            if len(data_analysis[r.scream()]['detected']) == 0:
                 rivetsToRemove.append(r)
         print("----------")
 
     # Filter out all unused riveters.
     for rv in rivetsToRemove: 
-        rr.mesa_riveters.remove(rv)
-        mesa_analysis.pop(rv.scream())   
+        rr.data_riveters.remove(rv)
+        data_analysis.pop(rv.scream())   
     # have access to analysis
     print("--------------------")
-    return mesa_analysis
+    return data_analysis
 
 
 #if approved, file will be processed taking in the user input from approveFile to adjust columns
@@ -200,5 +200,3 @@ if __name__ == "__main__":
     silentMode = "-s" in sys.argv
     for f in files:
         main(f, silentMode)
-
-# Add input values for DateFormatRiveter????

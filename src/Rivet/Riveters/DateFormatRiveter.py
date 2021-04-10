@@ -4,7 +4,7 @@ import csv
 
 # @author MWK
 # Child class of Riveter that checks for dates and standardizes them
-class DateFormatRiveter(Riveter.MesaRiveter):
+class DateFormatRiveter(Riveter.DataRiveter):
 
     def __init__(self):
         self.register()

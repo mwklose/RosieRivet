@@ -3,7 +3,7 @@ import rosie, csv
 
 #Child class of Riveter. Checks for large int columns that could be misread by Excel.
 # @author MWK
-class LargeIntRiveter(Riveter.MesaRiveter):
+class LargeIntRiveter(Riveter.DataRiveter):
 
     def __init__(self):
         self.register()

@@ -1,14 +1,14 @@
 import csv
 #Parent class for all riveter types
 metaRiveters = []
-mesaRiveters = []
+dataRiveters = []
 # @author MWK
 
 def getMetaRiveters():
     return metaRiveters
 
-def getMesaRiveters():
-    return mesaRiveters
+def getDataRiveters():
+    return dataRiveters
 
 class Riveter:
     # Define a constructor in each Riveter. 
@@ -52,13 +52,13 @@ class MetaRiveter(Riveter):
         metaRiveters.append(self)
 
 # Create a subset of Riveters focused on diving into the data and providing fixes, hence, "mesa"
-class MesaRiveter(Riveter):
+class DataRiveter(Riveter):
     @classmethod
     def __init__(cls):
         return
 
     def register(self):
-        mesaRiveters.append(self)   
+        dataRiveters.append(self)   
     # Jennings suggestions:
     # Make a min-max riveter (analysis only), shows extensibility
     # Make design that offers to not fix anything

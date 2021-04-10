@@ -12,7 +12,7 @@ pp = pprint.PrettyPrinter()
 class RosieRivet():
     def __init__(self, myfile, confidence=0.80):
         self.meta_riveters = self.getMetaRiveters()
-        self.mesa_riveters = self.getMesaRiveters()
+        self.data_riveters = self.getDataRiveters()
         # store filename; need to create multiple readers for each analysis
         self.csv = myfile
         
@@ -24,9 +24,9 @@ class RosieRivet():
         # Return all riveters defined by the session
         return Riveter.getMetaRiveters()
 
-    # Grabs all MesaRiveters registered by the system
-    def getMesaRiveters(self):
-        return Riveter.getMesaRiveters()
+    # Grabs all DataRiveters registered by the system
+    def getDataRiveters(self):
+        return Riveter.getDataRiveters()
 
     #actual beginning of the analysis process, will go through each riveter and determine if this
         #CSV has the particular data type, marking column to be displayed to user in approveFile
@@ -36,16 +36,16 @@ class RosieRivet():
         for r in self.meta_riveters:
             meta_analysis[r.scream()] = r.analyze(self.csv)
 
-        mesa_analysis = {}
-        for r in self.mesa_riveters:
+        data_analysis = {}
+        for r in self.data_riveters:
             # Get the analysis overall
-            mesa_analysis[r.scream()] = r.analyze(self.csv)
-        return mesa_analysis, meta_analysis
+            data_analysis[r.scream()] = r.analyze(self.csv)
+        return data_analysis, meta_analysis
 
     #After file is approved will then be processed in some way \o/ \o/ \o/
     def RivetProcessor(self, options, confidence=0.8, outfile="outfile"):
         csvf = self.RivetReadCSV()
-        for r in self.mesa_riveters:
+        for r in self.data_riveters:
             # Hand in a CSV reader, seek back to the start guarantee after each one. 
             r.apply(csvf, options, confidence)
         return csvf, options

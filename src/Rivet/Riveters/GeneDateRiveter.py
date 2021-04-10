@@ -6,7 +6,7 @@ import csv
 
 # Child class of Riveter that checks for gene names that could be misread as dates by Excel
 # @author MWK
-class GeneDateRiveter(Riveter.MesaRiveter):
+class GeneDateRiveter(Riveter.DataRiveter):
 
     #Initialize Riveter along with rosie engine 
     def __init__(self):
