@@ -2,6 +2,14 @@ body {
   font-family: "Lato", sans-serif;
 }
 
+html {
+  background-color: #e6e6e6;
+}
+
+drop-zone {
+  background-color: #999999;
+}
+
 /* The side navigation menu */
 .sidebar {
   margin: 0;
@@ -228,5 +236,3 @@ pre
 .dropdown-check-list.visible .items {
   display: block;
 }
-
-
