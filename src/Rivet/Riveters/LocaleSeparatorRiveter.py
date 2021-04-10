@@ -2,20 +2,18 @@ from . import Riveter
 
 #Child class of Riveter that checks for dates and standardizes them
 # @author MWK
-class LocaleSeparatorRiveter(Riveter.Riveter):
+class LocaleSeparatorRiveter(Riveter.MetaRiveter):
 
     def __init__(self):
         self.register()
         self.scream()
 
-    def analyze(self, column):
-        return {"detected" : {},
-                "confidence" : {},
-                "hits" : {}}
-
-    def apply(self, csvFile, options, confidence):
-        pass
+    def analyze(self, csvFile):
+        d = self.sniffDelimiter(csvFile).delimiter
+        return {"detected" : {(0,0,"Delimiter") : d},
+                "hits" : [1]}
 
     def scream(self):
         return "LocaleSeparatorRiveter"
+
 LocaleSeparatorRiveter()

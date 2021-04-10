@@ -21,10 +21,10 @@ def main(file, silentMode):
     rr = RosieRivet.RosieRivet(file) # call constructor of RosieRivet
 
     # Analyze File
-    myAnalysis = analyzeFile(rr)
+    mesaAnalysis, metaAnalysis = analyzeFile(rr)
     
     # Approve File
-    options = approveFile(rr, myAnalysis, silentMode)
+    options = approveFile(rr, mesaAnalysis, metaAnalysis, silentMode)
 
     # Process File
     rivetCSV, rivetTXT = processFile(rr, options)
@@ -42,36 +42,73 @@ def analyzeFile(rr):
 #starts interaction between user and system to approve the potential changes to files
    #will eventually display each column that could be misread and gets user to approve or deny
     #that this column needs to be protected.
-def approveFile(rr, analysis, silentMode):
+def approveFile(rr, mesa_analysis, meta_analysis, silentMode):
     if silentMode:
-        return analysis
+        return mesa_analysis
+    
+    # Flow of procedure: 
+    # MetaRiveter analysis (static)
+    # MesaRiveter analysis (dynamic)
+    # Return adjusted MesaRiveter analhsis
 
-    print("--------------------")
-    rivetsToRemove = []
-    for r in rr.riveters:
+    print("\n----METARIVETER ANALYSIS----")
+    for r in rr.meta_riveters:
         # See if riveting even possible
-        if sum(analysis[r.scream()]['hits']) == 0:
+        if sum(meta_analysis[r.scream()]['hits']) == 0:
+            print("No detections in", bcolors.OKBLUE, r.scream(), bcolors.ENDC)
+            continue
+
+        printhits = {}
+        colnames = {}
+        print("\nAnalysis detected in", bcolors.OKGREEN, r.scream(), bcolors.ENDC)
+        for ov in meta_analysis[r.scream()]['detected'].keys():
+            try:
+                # Key: Column name --> Value: Add example to list
+                printhits[ov[1]].append("%10s" % meta_analysis[r.scream()]['detected'][ov])
+            except KeyError:
+                # If key error, list does not exist yet, so create list with first element. 
+                # Key: Column name --> Value: Formatted List for values detected
+                printhits[ov[1]] = ["%10s" % meta_analysis[r.scream()]['detected'][ov]]
+                # Keep track of column names for happy printing :)))))
+                colnames[ov[1]] = ov[2]
+
+        # CLI show potential values to hit:
+        print()
+        for k in sorted(printhits.keys()):
+            print(bcolors.BOLD, # Bold face
+                    "%10s" % colnames[k],  # Column name
+                    #"(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, meta_analysis[r.scream()]['confidence'][k - 1], meta_analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
+                    bcolors.ENDC, # End bold face
+                    "-->", # Arrow for pretty shapes
+                    printhits[k][:5]) # Print up to 5 examples
+        print()
+
+    # MesaRiveter Analysis (dynamic)
+
+    print("\n----MESARIVETER ANALYSIS----")
+    rivetsToRemove = []
+    for r in rr.mesa_riveters:
+        # See if riveting even possible
+        if sum(mesa_analysis[r.scream()]['hits']) == 0:
             print("No rivets for", bcolors.OKBLUE, r.scream(), bcolors.ENDC)
             rivetsToRemove.append(r)
             continue
 
-        print("----------", "\nRivets detected for", bcolors.OKGREEN, r.scream(), bcolors.ENDC)
-        # Want to get into format: ROW NAME --> EX1, EX2, EX3
-
+        print("\nRivets detected for", bcolors.OKGREEN, r.scream(), bcolors.ENDC)
         # handle editing rows
         rc = "START"
         # Iterate until User decides to be done. 
         while rc.upper() != "DONE":
             printhits = {}
             colnames = {}
-            for ov in analysis[r.scream()]['detected'].keys():
+            for ov in mesa_analysis[r.scream()]['detected'].keys():
                 try:
                     # Key: Column name --> Value: Add example to list
-                    printhits[ov[1]].append("%10s" % analysis[r.scream()]['detected'][ov])
+                    printhits[ov[1]].append("%10s" % mesa_analysis[r.scream()]['detected'][ov])
                 except KeyError:
                     # If key error, list does not exist yet, so create list with first element. 
                     # Key: Column name --> Value: Formatted List for values detected
-                    printhits[ov[1]] = ["%10s" % analysis[r.scream()]['detected'][ov]]
+                    printhits[ov[1]] = ["%10s" % mesa_analysis[r.scream()]['detected'][ov]]
                     # Keep track of column names for happy printing :)))))
                     colnames[ov[1]] = ov[2]
 
@@ -80,7 +117,7 @@ def approveFile(rr, analysis, silentMode):
             for k in sorted(printhits.keys()):
                 print(bcolors.BOLD, # Bold face
                         "%10s" % colnames[k],  # Column name
-                        "(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, analysis[r.scream()]['confidence'][k - 1], analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
+                        "(Column:%2d; Confidence:%1.5f; Hits:%4d)" % (k, mesa_analysis[r.scream()]['confidence'][k - 1], mesa_analysis[r.scream()]['hits'][k - 1]), # Col num, Confidence, Number of hits
                         bcolors.ENDC, # End bold face
                         "-->", # Arrow for pretty shapes
                         printhits[k][:5]) # Print up to 5 examples
@@ -114,35 +151,36 @@ def approveFile(rr, analysis, silentMode):
             
             # Remove values from ANALYSIS
             # Get copy of list to remove values from; throws RunTimeError otherwise due to shallow copy of list
-            remove = list(analysis[r.scream()]['detected'].keys()).copy()
+            remove = list(mesa_analysis[r.scream()]['detected'].keys()).copy()
             # If not all columns, then only remove values needed.
             if col != "*":
                 remove = [k for k in remove if k[1] == col]
 
             # Iterate through all matches and remove them.
             for i in remove:
-                analysis[r.scream()]['detected'].pop(i)
+                mesa_analysis[r.scream()]['detected'].pop(i)
             
             # Check if all values have been removed - this is okay. 
-            if len(analysis[r.scream()]['detected']) == 0:
+            if len(mesa_analysis[r.scream()]['detected']) == 0:
                 rivetsToRemove.append(r)
         print("----------")
 
     # Filter out all unused riveters.
     for rv in rivetsToRemove: 
-        rr.riveters.remove(rv)
-        analysis.pop(rv.scream())   
+        rr.mesa_riveters.remove(rv)
+        mesa_analysis.pop(rv.scream())   
     # have access to analysis
     print("--------------------")
-    return analysis
+    return mesa_analysis
 
 
 #if approved, file will be processed taking in the user input from approveFile to adjust columns
-    #will return the exact columns that need to be protected that will then be written in writeFile
+#will return the exact columns that need to be protected that will then be written in writeFile
 def processFile(rr, options):
     return rr.RivetProcessor(options)
+
 #begins process of writing the files after figuring out which should be processed from processFile
-    #will return the final adjusted CSV file with the columns protected.
+#will return the final adjusted CSV file with the columns protected.
 def writeFile(CSV, TXT):
     with open("out.csv", "w") as cf:
         cw = csv.writer(cf)

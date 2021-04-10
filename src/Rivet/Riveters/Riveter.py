@@ -4,8 +4,11 @@ metaRiveters = []
 mesaRiveters = []
 # @author MWK
 
-def getRiveters():
+def getMetaRiveters():
     return metaRiveters
+
+def getMesaRiveters():
+    return mesaRiveters
 
 class Riveter:
     # Define a constructor in each Riveter. 

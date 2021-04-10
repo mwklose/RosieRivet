@@ -3,12 +3,12 @@ import rosie, csv
 
 #Child class of Riveter. Checks for large int columns that could be misread by Excel.
 # @author MWK
-class SYLKRiveter(Riveter.Riveter):
+class SYLKRiveter(Riveter.MetaRiveter):
     def __init__(self):
-            self.register()
-            self.loadRosieEngine()
-            self.sylk_analysis = {}
-            self.all = {}
+        self.register()
+        self.loadRosieEngine()
+        self.sylk_analysis = {}
+        self.all = {}
 
     #Loads rosie engine and date patterns to detect
     def loadRosieEngine(self):
@@ -33,15 +33,6 @@ class SYLKRiveter(Riveter.Riveter):
         self.sylk_analysis["confidence"] = [1] * n
         
         return self.sylk_analysis
-
-    def apply(self, csvFileAsListOfLists, options, confidence):
-        if(self.scream() not in options):
-            return
-        detections = options[self.scream()]["detected"]
-        for k in detections.keys():
-            row, col = 0, 0
-            csvFileAsListOfLists[0][0] = '\'{:s}'.format(csvFileAsListOfLists[0][0])
-        return
     
     def scream(self):
         return "SYLKRiveter"

@@ -2,7 +2,7 @@ from . import Riveter
 import rosie, csv
 # Child class of Riveter that checks for potential harmful CSV injections
 # @author MWK
-class CSVInjectionRiveter(Riveter.Riveter):
+class CSVInjectionRiveter(Riveter.MesaRiveter):
 
     def __init__(self):
         self.register()
