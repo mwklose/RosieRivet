@@ -1,3 +1,18 @@
+<<<<<<< HEAD
+{   'DateFormatRiveter': {   'confidence': [0, 0.1],
+                             'detected': {(10, 2, 'GENE NAME'): '05/11/2021'},
+                             'hits': [0, 1],
+                             'types': {'date.us_slashed': 1}},
+    'GeneDateRiveter': {   'DATESTAT': [[0, 0], [0.6, 0.1]],
+                           'confidence': [1, 0.875],
+                           'detected': {   (1, 2, 'GENE NAME'): 'APR1',
+                                           (3, 2, 'GENE NAME'): 'MARCH2',
+                                           (4, 2, 'GENE NAME'): 'APR1',
+                                           (6, 2, 'GENE NAME'): 'MARCH2',
+                                           (7, 2, 'GENE NAME'): 'APR1',
+                                           (9, 2, 'GENE NAME'): 'MARCH2'},
+                           'hits': [0, 6]}}
+=======
 {   'DateFormatRiveter': {   'confidence': [0, 1, 0, 0],
                              'detected': {   (1, 2, 'DATE'): '3/10/2021',
                                              (2, 2, 'DATE'): '2/10/2021',
@@ -45,3 +60,4 @@
                                            (12, 1, 'ID'): '000182802',
                                            (13, 1, 'ID'): '000575757'},
                            'hits': [13, 0, 0, 0]}}
+>>>>>>> 26a3f966616117fa4e5d93629d406b8de6a2aa09

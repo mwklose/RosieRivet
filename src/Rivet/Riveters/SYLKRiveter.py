@@ -26,7 +26,7 @@ class SYLKRiveter(Riveter.MetaRiveter):
             keys = next(csvReader)
             n = len(keys)
             if "ID" in keys[0].upper():
-                self.sylk_analysis["detected"][(0,0, keys[0].upper())] = keys[0]
+                self.sylk_analysis["detected"]["data"] = "Detected Symbolic Link"
                 self.sylk_analysis["hits"] = [1]
         
         # Make empty list of confidences; either its there or it isn't. 

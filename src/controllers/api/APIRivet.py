@@ -48,25 +48,28 @@ def analyze():
 
 	#retrieve Rosie analysis, return error if error is raised anywhere in RosieRivet
 	try:
-		analysis, meta = rr.RivetFileAnalyzer()
+		data_analysis, meta_analysis = rr.RivetFileAnalyzer()
 	except:
 		return make_response({},400)
 
+	def clean_analysis(analysis, serialize):
+		#Convert Tuple to string (JSON cannot serialize tuples)
+		for riveter,anl in list(analysis.items()):
+			#if no detected riveter, delete from analysis
+			if( not len(anl["detected"])):
+				del analysis[riveter]
+				continue
 
-
-	#Convert Tuple to string (JSON cannot serialize tuples)
-	for riveter,anl in list(analysis.items()):
-		#if no detected riveter, delete from analysis
-		if( not len(anl["detected"])):
-			del analysis[riveter]
-			continue
-
-		# SORT KEY VALUES HERE
-		analysis[riveter]["detected"] = dict((':'.join(str(keys) for keys in k), v) for k,v in analysis[riveter]["detected"].items())
-
+			# SORT KEY VALUES HERE
+			if(serialize):
+				analysis[riveter]["detected"] = dict((':'.join(str(keys) for keys in k), v) for k,v in analysis[riveter]["detected"].items())
+		return analysis
+	data_analysis = clean_analysis(data_analysis, True)
+	meta_analysis = clean_analysis(meta_analysis, False)
 	#store RosieRivet object and file under session key
 	cookie_key = request.form['sess_key'] + SECRET_KEY
 	sess_cache.put(cookie_key, rr, file)
+	final_analysis = {"data_analysis" : data_analysis, "meta_analysis":meta_analysis}
 
 
 
@@ -74,7 +77,7 @@ def analyze():
 	# os.remove((os.path.join(ROOT_PATH,file.filename)))
 
 	#Return successful analysis
-	return make_response(jsonify(analysis),200)
+	return make_response(jsonify(final_analysis),200)
 
 @app.route('/v1/process', methods=['POST'])
 def process():
@@ -98,10 +101,11 @@ def process():
 	options = json.loads(request.form["analysis"])
 	for riveter,anl in options.items():
 		options[riveter]["detected"] = dict(((int(k.split(":")[0]), int(k.split(":")[1]), k.split(":")[2]), v) for k,v in options[riveter]["detected"].items())
-	
-	print(options)
+	confidence = .8
+	if("confidence" in request.form):
+		confidence = int(request.form["confidence"])//100
 	#Process file
-	rivetCSV, rivetTXT = rr.RivetProcessor(options)
+	rivetCSV, rivetTXT = rr.RivetProcessor(options,confidence)
 
 	#Write modified file
 	with open("out.csv", "w") as cf:
@@ -112,16 +116,13 @@ def process():
 		pprint.PrettyPrinter(indent=4, stream=tf).pprint(rivetTXT)
 
 
-	# zipf = zipfile.ZipFile('modified.zip','w', zipfile.ZIP_DEFLATED)
-	# zipf.write("out.csv")
-	# zipf.write("out.txt")
-	# zipf.close()
 
 	# #remove files created
-	# os.remove((os.path.join(ROOT_PATH,file.filename)))
+	os.remove((os.path.join(ROOT_PATH,file.filename)))
 	response = send_from_directory(directory='', filename='out.csv')
 
 	return response
+	os.remove((os.path.join(ROOT_PATH,out.csv)))
 
 
  

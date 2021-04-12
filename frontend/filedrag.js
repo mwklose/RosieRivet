@@ -73,7 +73,22 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
  			contentType: false
 		});
 		req.then(function(response) {
-			sessionStorage.setItem(file.name + "_analysis", JSON.stringify(response));
+			sessionStorage.setItem(file.name + "_analysis", JSON.stringify(response["data_analysis"]));
+			for (var key in response["meta_analysis"]){
+				if( response["meta_analysis"][key]["detected"]){
+				Output(
+				"<p>" + key + "- <strong>" + response["meta_analysis"][key]["detected"]["data"] + "</strong>"
+					);
+				}
+
+			}
+			if(response["data_analysis"]){
+				Output(
+					"<div class=\"tooltip\"> Confidence <span class=\"tooltiptext\">Rivet has detected "+
+					"possible misinterpretations in your file, configure the confidence value Rivet should use in remedying these issues</span></div>" + "<input id=confidence_value type=\"text\"" + " value = 80>"
+				);
+			}
+
 		}, function(xhr) {
 		  console.error('failed to fetch xhr', xhr)
 		})
@@ -82,6 +97,8 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 
 	}
+
+
 
 
 	// initialize
@@ -115,5 +132,11 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		Init();
 	}
 
-
 })();
+function submit(){
+	console.log("here")
+	parent.location='process.html';
+	sessionStorage.setItem("confidence", document.getElementById("confidence_value").value);
+}
+document.getElementById ("process_page").addEventListener ("click", submit, false);
+
