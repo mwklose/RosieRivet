@@ -10,7 +10,7 @@ class LocaleSeparatorRiveter(Riveter.MetaRiveter):
 
     def analyze(self, csvFile):
         d = self.sniffDelimiter(csvFile).delimiter
-        return {"detected" : {(0,0,"Delimiter") : d},
+        return {"detected" : { "data" : "Separator used : " + '"'+ d + '"'},
                 "hits" : [1]}
 
     def scream(self):
