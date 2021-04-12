@@ -48,7 +48,7 @@ def analyze():
 
 	#retrieve Rosie analysis, return error if error is raised anywhere in RosieRivet
 	try:
-		analysis = rr.RivetFileAnalyzer()
+		analysis, meta = rr.RivetFileAnalyzer()
 	except:
 		return make_response({},400)
 
