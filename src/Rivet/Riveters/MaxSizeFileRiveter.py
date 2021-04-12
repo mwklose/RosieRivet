@@ -21,20 +21,21 @@ class MaxFileSizeRiveter(Riveter.MetaRiveter):
         reader = csv.reader(csvFile, delim)
         analysis["detected"] = {}
 
-        colnum = 0
-        rownum = 0
+        colnum = 1
+        rownum = 1
+        with open(csvFile) as f:
+            reader = csv.reader(f, delim)
         # Get maximum file row size and file column size
-        for row in reader:
-            rownum += 1
-            # Branchless programming:
-            colnum = (len(row) > colnum) * len(row) + (len(row) <= colnum) * colnum
+            for row in reader:
+                rownum += 1
+                # Branchless programming:
+                colnum = (len(row) > colnum) * len(row) + (len(row) <= colnum) * colnum
 
-        analysis["detected"]["TOTAL ROWS" + str(rownum)] = rownum
-        analysis["detected"]["TOTAL COLS"] = colnum
-
-        analysis["detected"]["MAX ROWS EXCEEDED"] = rownum >= MAX_ROWS
-        analysis["detected"]["MAX COLS EXCEEDED"] = colnum >= MAX_COLS
-        
+        mre = rownum >= MAX_ROWS
+        mce = colnum >= MAX_COLS
+        result = "Total Rows: {rows}<br>Total Cols: {cols}<br>Max Rows Exceeded: {mre}<br>Max Cols Exceeded: {mce}".format(rows=rownum, cols=colnum, mre=mre, mce=mce)
+        analysis["detected"]["data"] = result
+    
         analysis["hits"] = [1]     
             
         return analysis

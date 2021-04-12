@@ -58,15 +58,11 @@ class DataRiveter(Riveter):
         return
 
     def register(self):
-        dataRiveters.append(self)   
+        dataRiveters.append(self)  
+
     # Jennings suggestions:
     # Make a min-max riveter (analysis only), shows extensibility
-    # Make design that offers to not fix anything
-    # SYLK riveter?
     # Max file size riveter?
-    # Offer more than one way to fix something?
     # Design issue: how does a riveter know what is in a column?
 
-    # Assume homogenous columns for scientific data
-    # "Typical spreadsheets" not one of our use cases, simplifies code somewhat
     # Find actual examples from real life?
