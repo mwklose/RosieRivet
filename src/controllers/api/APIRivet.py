@@ -47,10 +47,8 @@ def analyze():
 	rr = RosieRivet.RosieRivet(file.filename)
 
 	#retrieve Rosie analysis, return error if error is raised anywhere in RosieRivet
-	try:
-		data_analysis, meta_analysis = rr.RivetFileAnalyzer()
-	except:
-		return make_response({},400)
+	data_analysis, meta_analysis = rr.RivetFileAnalyzer()
+
 
 	def clean_analysis(analysis, serialize):
 		#Convert Tuple to string (JSON cannot serialize tuples)
