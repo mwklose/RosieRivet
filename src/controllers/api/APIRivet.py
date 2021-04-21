@@ -11,6 +11,7 @@ from flask import send_file
 import csv,json
 import pprint
 from flask_cors import CORS
+from flask import after_this_request
 
 
 
@@ -67,12 +68,16 @@ def analyze():
 	#store RosieRivet object and file under session key
 	cookie_key = request.form['sess_key'] + SECRET_KEY
 	sess_cache.put(cookie_key, rr, file)
-	final_analysis = {"data_analysis" : data_analysis, "meta_analysis":meta_analysis}
+	final_analysis = {}
+	if(len(data_analysis)):
+		final_analysis["data_analysis"] = data_analysis
+	if(len(meta_analysis)):
+		final_analysis["meta_analysis"]=meta_analysis
 
 
 
 	# #Removed requested file
-	# os.remove((os.path.join(ROOT_PATH,file.filename)))
+	os.remove((os.path.join(ROOT_PATH,file.filename)))
 
 	#Return successful analysis
 	return make_response(jsonify(final_analysis),200)
@@ -89,11 +94,11 @@ def process():
 	#if session key was not created prior to process or session key is deleted, return invalid request
 	if(sess_cache.get(cookie_key) == -1):
 		return make_response({},400)
-
+	file = request.files["file"]
 	#retrieve RosieRivet object and file associated with session key
-	rr,file = sess_cache.get(cookie_key)
+	rr,f = sess_cache.get(cookie_key)
 
-	# file.save(os.path.join(ROOT_PATH,file.filename))
+	file.save(os.path.join(ROOT_PATH,file.filename))
 
 	#retrieve analysis(options) back from frontend which should be edited by the user to their preference
 	options = json.loads(request.form["analysis"])
@@ -120,7 +125,6 @@ def process():
 	response = send_from_directory(directory='', filename='out.csv')
 
 	return response
-	os.remove((os.path.join(ROOT_PATH,out.csv)))
 
 
  

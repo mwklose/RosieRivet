@@ -6,7 +6,6 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 (function() {
 	DEBUG_URL = "http://127.0.0.1:5000/v1/analyze";
-	sessionStorage.clear()
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
@@ -30,6 +29,8 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// file selection
 	function FileSelectHandler(e) {
+		sessionStorage.clear()
+		$id("messages").innerHTML = "";
 
 		//Set or Get session key for current user
 		if(sessionStorage.getItem("sess_key") === null){
@@ -41,13 +42,23 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 		// fetch FileList object
 		var files = e.target.files || e.dataTransfer.files;
-
-		// process all File objects
-		for (var i = 0, f; f = files[i]; i++) {
-			
-			sessionStorage.setItem(f.name,f);
-			ParseFile(f);
+		if(files.length > 1){
+			alert("You can only upload 1 file");
+			return;
 		}
+		// process all File objects
+		f = files[0];
+		ParseFile(f);
+
+		var reader = new FileReader()
+		reader.addEventListener("load", function () {
+		    // convert image file to base64 string
+		   sessionStorage["file"] = reader.result;
+		   sessionStorage["filename"] = f.name;
+		  }, false);
+
+		reader.readAsDataURL(f);
+		
 
 		document.getElementById("button_load").setAttribute("class", "fa fa-spinner fa-spin");
 
@@ -57,6 +68,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	// output file information
 	function ParseFile(file) {
+
 		Output(
 			"<p>File information: <strong>" + file.name +
 			"</strong> type: <strong>" + file.type +
@@ -90,9 +102,13 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 					"<div class=\"tooltip\"> Confidence <span class=\"tooltiptext\">Rivet has detected "+
 					"possible misinterpretations in your file, configure the confidence value Rivet should use in remedying these issues</span></div>" + "<input id=confidence_value type=\"text\"" + " value = 80>"
 				);
+				document.getElementById("process_page").removeAttribute("disabled");
+
+			}else{
+				Output("<p style=\"red\">Rivet could not find any possible misinterpretations for your file</p>");
 			}
+
 			document.getElementById("button_load").setAttribute("class", "");
-			document.getElementById("process_page").removeAttribute("disabled");
 
 
 		}, function(xhr) {

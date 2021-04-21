@@ -217,16 +217,13 @@ function send(){
         }
       }
       var fd = new FormData();
-      var filename = "";
-      for(i = 0; i < sessionStorage.length; i++){
-        if(sessionStorage.key(i).endsWith("csv")){
-          fd.append('file', sessionStorage.getItem(sessionStorage.key(i)));
-          var myfile = sessionStorage.key(i);
-          filename = myfile.substring(0, myfile.length - 4);
-          break;
-        }
-        
-      } 
+      var file = sessionStorage["file"];
+      var filename = sessionStorage["filename"];
+      var base64Parts = file.split(",");
+      var fileFormat = base64Parts[0].split(";")[1];
+      var fileContent = atob(base64Parts[1]);
+      var file = new File([fileContent], filename, {type: fileFormat});
+      fd.append('file', file);
       fd.append('sess_key', sessionStorage.getItem("sess_key"));
       fd.append('analysis', JSON.stringify(analysis_payload))
       if("confidence" in sessionStorage){
