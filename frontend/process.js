@@ -191,6 +191,7 @@ function makeTable(i, keys) {
 
 //send and create protected files
 function send(){
+
   for(var i = 0; i < analysis.length; i++){
 
       analysis_payload = {}
@@ -246,7 +247,11 @@ function send(){
         a.download = filename + "_riveted.csv";
         document.body.appendChild(a);
         a.click();
+        parent.location='home.html';
+
       }, function(xhr) {
+        parent.location='home.html';
+        alert("Failed to create new file, please try again momentarily");
         console.error('failed to fetch xhr', xhr)
       })
 

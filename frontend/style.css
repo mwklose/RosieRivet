@@ -10,6 +10,10 @@ drop-zone {
   background-color: #999999;
 }
 
+.bottombar {
+  text-align: center;
+}
+
 /* The side navigation menu */
 .sidebar {
   margin: 0;
@@ -51,6 +55,12 @@ drop-zone {
   display: inline-block;
   font-size: 16px;
 }
+
+button:disabled,
+button[disabled]{
+  background-color: #8490D0; /* Blue */
+}
+
 .button2 {
   background-color: #3F51B5; /* Blue */
   border: none;

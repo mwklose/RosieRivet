@@ -49,6 +49,9 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 			ParseFile(f);
 		}
 
+		document.getElementById("button_load").setAttribute("class", "fa fa-spinner fa-spin");
+
+
 	}
 
 
@@ -88,9 +91,14 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 					"possible misinterpretations in your file, configure the confidence value Rivet should use in remedying these issues</span></div>" + "<input id=confidence_value type=\"text\"" + " value = 80>"
 				);
 			}
+			document.getElementById("button_load").setAttribute("class", "");
+			document.getElementById("process_page").removeAttribute("disabled");
+
 
 		}, function(xhr) {
 		  console.error('failed to fetch xhr', xhr)
+			document.getElementById("button_load").setAttribute("class", "");
+
 		})
 
 
@@ -134,9 +142,8 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 })();
 function submit(){
-	console.log("here")
 	parent.location='process.html';
 	sessionStorage.setItem("confidence", document.getElementById("confidence_value").value);
 }
-document.getElementById ("process_page").addEventListener ("click", submit, false);
+document.getElementById("process_page").addEventListener ("click", submit, false);
 
