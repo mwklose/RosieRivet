@@ -86,7 +86,7 @@ class LargeIntRiveter(Riveter.DataRiveter):
             row = k[0]
             col = k[1] - 1
             if stats[col] > confidence:
-                csvFile[row][col] = '\'{:s}'.format(csvFile[row][col])
+                csvFile[row][col] = "\'{:s}".format(csvFile[row][col])
         return
 
     def scream(self):

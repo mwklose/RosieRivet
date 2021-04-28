@@ -18,8 +18,8 @@ class GeneDateRiveter(Riveter.DataRiveter):
         
     #Loads rosie engine and date patterns to detect
     def loadRosieEngine(self):
-        librosiedir = './lib'
-        rosie.load(librosiedir, quiet = True)
+        # librosiedir = './lib'
+        # rosie.load(librosiedir, quiet = True)
         engine = rosie.engine()
         engine.import_package("date")
         self.date_patterns = engine.compile("date.any")
@@ -99,7 +99,7 @@ class GeneDateRiveter(Riveter.DataRiveter):
             # Check against confidence
             if stats[col] > confidence: 
                 value = csvFile[row][col]  # Get value by row and column
-                csvFile[row][col] = "'" + value # Find remedy for row/column
+                csvFile[row][col] = "\'" + value # Find remedy for row/column
         return csvFile
 
 GeneDateRiveter()
